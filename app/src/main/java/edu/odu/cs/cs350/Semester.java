@@ -6,22 +6,23 @@ import java.nio.file.Paths;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Semester {
     // Default Constructor
     public Semester() {
-//        this.name = "";
-//        this.preRegDate = "";
-//        this.addDeadline = "";
-//        this.EnrollmentSnapshots = new ArrayList<EnrollmentSnapshot>();
+        this.name = "";
+        this.preRegDate = "";
+        this.addDeadline = "";
+        this.EnrollmentSnapshots = new ArrayList<EnrollmentSnapshot>();
     }
     public Semester(String semesterPath, String preRegDate, String addDeadline) {
-//        this.name = semesterPath.substring(0, semesterPath.length()-6);
-//        this.pathToSemesterDir = Paths.get(semesterPath);
-//        this.preRegDate = preRegDate;
-//        this.addDeadline = addDeadline;
-//        this.EnrollmentSnapshots = new ArrayList<EnrollmentSnapshot>();
+        this.name = semesterPath.substring(semesterPath.lastIndexOf('/')+1, semesterPath.length());
+        this.pathToSemesterDir = Paths.get(semesterPath);
+        this.preRegDate = preRegDate;
+        this.addDeadline = addDeadline;
+        this.EnrollmentSnapshots = new ArrayList<EnrollmentSnapshot>();
     }
     
     public String getName() {
@@ -33,6 +34,9 @@ public class Semester {
     public String getAddDeadline() {
         return this.addDeadline;
     }
+    public Path getPath() {
+        return this.pathToSemesterDir;
+    }
 
     /*
      * The semester directory location for each semester
@@ -40,16 +44,16 @@ public class Semester {
      * the last item in the supplied path, which is the last 6 characters.
      */
     public void setName(String semesterPath) {
-        // this.name = semesterPath.substring(0, semesterPath.length()-6);
+         this.name = semesterPath.substring(semesterPath.lastIndexOf('/')+1, semesterPath.length());
     }
     public void setPreRegDate(String date) {
-        // this.preRegDate = date;
+         this.preRegDate = date;
     }
     public void setAddDeadline(String deadline) {
-        // this.addDeadline = deadline;
+         this.addDeadline = deadline;
     }
     public void setPath(String semesterDirPath) {
-        // this.pathToSemesterDir = Paths.get(semesterDirPath);
+         this.pathToSemesterDir = Paths.get(semesterDirPath);
     }
     /*
      * Instantiate the pre registration and add deadline dates,
@@ -97,7 +101,7 @@ public class Semester {
      * be within the pre registration date and add deadline.
      */
     public void retrieveEnrollmentSnapshots() {
-
+        
     }
     
     // Data members
@@ -105,7 +109,8 @@ public class Semester {
     private String semesterPath;
     private String preRegDate;
     private String addDeadline;
-    private List<EnrollmentSnapshot> EnrollmentSnapshots;
     private Path pathToSemesterDir;
     private File dates;
+
+    protected List<EnrollmentSnapshot> EnrollmentSnapshots;
 }
