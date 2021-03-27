@@ -6,9 +6,9 @@ package edu.odu.cs.cs350;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class AppTest {
+class RunProjectionsTest {
     @Test void appHasAGreeting() {
-        App classUnderTest = new App();
+        RunProjections classUnderTest = new RunProjections();
         assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
     }
 }

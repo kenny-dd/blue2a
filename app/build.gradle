@@ -36,7 +36,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'edu.odu.cs.cs350.App'
+    mainClass = 'edu.odu.cs.cs350.RunProjections'
 }
 
 test {
