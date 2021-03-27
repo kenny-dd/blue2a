@@ -1,7 +1,6 @@
 package edu.odu.cs.cs350;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -26,7 +25,7 @@ class TestSemester {
         public Semester semester1;
         public Semester semester2;
         public Semester semester3;
-    /*
+    /**
      * @throws java.lang.Exception
      */
     @BeforeEach
@@ -40,7 +39,7 @@ class TestSemester {
         enrollDeadline = "1111-02-02";
         path = Paths.get(strPathToSemester);
     }
-    /*
+    /**
      * @throws java.net.MalformedURLException
      */
     @Test
@@ -93,7 +92,7 @@ class TestSemester {
         semester1.setAddDeadline(enrollDeadline);
         assertThat (semester1.getAddDeadline(), is(enrollDeadline));
     }
-    /*
+    /**
      * @throws java.net.MalformedURLException
      */
     @Test
