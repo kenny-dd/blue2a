@@ -1,6 +1,8 @@
 package edu.odu.cs.cs350;
 
-
+import java.lang.String;
+import java.net.URL;
+import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.File;
@@ -12,19 +14,21 @@ import java.util.Scanner;
 public class Semester {
     // Default Constructor
     public Semester() {
-        this.name = "";
+				this.name = "";
         this.preRegDate = "";
         this.addDeadline = "";
         this.EnrollmentSnapshots = new ArrayList<EnrollmentSnapshot>();
     }
-    public Semester(String semesterPath, String preRegDate, String addDeadline) {
+    public Semester(String semesterPath, String preRegDate, String addDeadline) throws MalformedURLException {
         this.name = semesterPath.substring(semesterPath.lastIndexOf('/')+1, semesterPath.length());
-        this.pathToSemesterDir = Paths.get(semesterPath);
         this.preRegDate = preRegDate;
         this.addDeadline = addDeadline;
         this.EnrollmentSnapshots = new ArrayList<EnrollmentSnapshot>();
+        setPath(semesterPath);
     }
-    
+		public URL getURL() {
+			return this.url;
+		}
     public String getName() {
         return this.name;
     }
@@ -44,16 +48,37 @@ public class Semester {
      * the last item in the supplied path, which is the last 6 characters.
      */
     public void setName(String semesterPath) {
-         this.name = semesterPath.substring(semesterPath.lastIndexOf('/')+1, semesterPath.length());
+        this.name = semesterPath.substring(semesterPath.lastIndexOf('/')+1, semesterPath.length());
     }
     public void setPreRegDate(String date) {
-         this.preRegDate = date;
+        this.preRegDate = date;
     }
     public void setAddDeadline(String deadline) {
-         this.addDeadline = deadline;
+        this.addDeadline = deadline;
     }
-    public void setPath(String semesterDirPath) {
-         this.pathToSemesterDir = Paths.get(semesterDirPath);
+    /*
+     * Sets path for semester class. 
+     * Can take a URL or standard unix path.
+     */
+    public String setPath(String semesterDirPath) throws MalformedURLException {
+        String s = semesterDirPath.trim().toLowerCase();
+        boolean isURL = s.startsWith("http://") || s.startsWith("https://");
+        if (isURL) {
+						try {
+								this.url = new URL(semesterDirPath);
+						} 
+						catch (MalformedURLException ex) {
+								throw ex.getCause();
+						}
+						finally {
+								this.pathToSemesterDir = Paths.get(this.url.getPath());
+								return "URL";
+        		}
+				}
+        else {
+            this.pathToSemesterDir = Paths.get(semesterDirPath);
+            return "notURL";
+        }
     }
     /*
      * Instantiate the pre registration and add deadline dates,
@@ -109,6 +134,7 @@ public class Semester {
     private String semesterPath;
     private String preRegDate;
     private String addDeadline;
+    private URL url;
     private Path pathToSemesterDir;
     private File dates;
 
