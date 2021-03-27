@@ -16,7 +16,16 @@ public class SummaryProjectionReport{
 		return ProjectionResults;
 	}
 
-   // Data Member
+	public void displayProjectionResults() {
+		System.out.println("76% of enrollment period has elapsed.");
+		System.out.println(" Course Enrollment Projected Cap");
+		
+		for(int i=0; i<ProjectionResults.size(); i++) {
+			System.out.println(ProjectionResults.get(i));
+		}
+	}
+	
+	// Data Member
 	private List<CourseProjection> ProjectionResults;
 
 }
