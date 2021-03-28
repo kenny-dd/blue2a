@@ -26,9 +26,9 @@ public class Semester {
         this.EnrollmentSnapshots = new ArrayList<EnrollmentSnapshot>();
         setPath(semesterPath);
     }
-		public URL getURL() {
-			return this.url;
-		}
+	public URL getURL() {
+		return this.url;
+	}
     public String getName() {
         return this.name;
     }
