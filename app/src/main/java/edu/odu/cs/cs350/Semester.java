@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class Semester {
     // Default Constructor
     public Semester() {
-				this.name = "";
+		this.name = "";
         this.preRegDate = "";
         this.addDeadline = "";
         this.EnrollmentSnapshots = new ArrayList<EnrollmentSnapshot>();
@@ -64,17 +64,17 @@ public class Semester {
         String s = semesterDirPath.trim().toLowerCase();
         boolean isURL = s.startsWith("http://") || s.startsWith("https://");
         if (isURL) {
-						try {
-								this.url = new URL(semesterDirPath);
-						} 
-						catch (MalformedURLException ex) {
-								throw ex.getCause();
-						}
-						finally {
-								this.pathToSemesterDir = Paths.get(this.url.getPath());
-								return "URL";
-        		}
-				}
+			try {
+				this.url = new URL(semesterDirPath);
+			} 
+			catch (MalformedURLException ex) {
+				throw ex.getCause();
+			}
+			finally {
+				this.pathToSemesterDir = Paths.get(this.url.getPath());
+				return "URL";
+        	}
+		}
         else {
             this.pathToSemesterDir = Paths.get(semesterDirPath);
             return "notURL";
