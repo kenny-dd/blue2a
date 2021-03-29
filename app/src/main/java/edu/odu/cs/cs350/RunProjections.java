@@ -9,9 +9,12 @@ import java.util.*;
 
 
 public class RunProjections {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+
+	private SummaryProjectionReport summaryReport;
+
+    public RunProjections() {
+    	summaryReport = new SummaryProjectionReport();
+	}
      
     public static void main(String[] args) {
     	
@@ -26,17 +29,22 @@ public class RunProjections {
     	for (int i = 0; i < args.length; i++)
     	{
     		semesterList.add(new Semester());
-	    		try {
-	    		    semesterList.get(i).setPath(args[i]);
-	    		} catch (MalformedURLException e) {
-    		  
+			try {
+				semesterList.get(i).setPath(args[i]);
+			} catch (MalformedURLException e) {
+				//Does not throw error when invalid URL is passed yet
+    		  	System.err.println("Invalid URL passed: " + args[i]);
     		}
     		
     	}
     	
         RunProjections prog = new RunProjections();
-//        URL url = prog.getURL(args[0]);        	
-        System.out.println(prog.getGreeting());      
+    	//Automate this later when the projections are actually being calculated.
+    	prog.summaryReport.addCourse(new CourseProjection("CS120G", 46, 104, 120));
+		prog.summaryReport.addCourse(new CourseProjection("CS121G", 32, 86, 100));
+		prog.summaryReport.addCourse(new CourseProjection("CS170G", 55, 88, 75));
+		prog.summaryReport.addCourse(new CourseProjection("CS150", 70, 104, 130));
+    	prog.summaryReport.displayProjectionResults();
         
     }
 }
