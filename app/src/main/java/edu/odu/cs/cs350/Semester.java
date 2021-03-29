@@ -111,8 +111,9 @@ public class Semester {
         }
     }
     /**
-     * Fetch all relevant csv files and the "dates.txt" file,
-     * entering each csv file into the csvFiles list.
+     * Fetch all relevant csv files and the "dates.txt" file
+     * from the semester's directory. 
+     * Each csv file is put into the csvFiles list.
      * If the file doesnt exist, or any other issue is encountered,
      * an IOException is thrown.
      */
