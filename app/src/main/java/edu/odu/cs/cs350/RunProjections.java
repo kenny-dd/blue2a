@@ -16,52 +16,7 @@ public class RunProjections {
     public String getGreeting() {
         return "Hello World!";
     }
-    
-    public URL getURL(String urlStr){
-        // begin code from https://www.baeldung.com/java-check-url-exists
-        URL url;
-        int responseCode;
-        try {
-            url = new URL(urlStr);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        //URLConnection urlCon = url.openConnection();
-        HttpURLConnection urlCon = null;
-
-        try {
-            urlCon = (HttpURLConnection) url.openConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            urlCon.setRequestMethod("HEAD");
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-        try {
-            responseCode = urlCon.getResponseCode();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        //end code from https://www.baeldung.com/java-check-url-exists
-
-        if (urlCon.HTTP_NOT_FOUND ==  responseCode) {
-            System.err.println("Invalid inout");
-            return null;
-        }
-        return url;
-    }
-
-
-    
+     
     public static void main(String[] args) {
     	
     	List<Semester> semesterList = new ArrayList<>();
