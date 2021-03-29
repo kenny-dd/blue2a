@@ -39,7 +39,7 @@ public class RunProjections {
     	}
     	
         RunProjections prog = new RunProjections();
-        URL url = prog.getURL(args[0]);        	
+//        URL url = prog.getURL(args[0]);        	
         System.out.println(prog.getGreeting());      
         
     }
