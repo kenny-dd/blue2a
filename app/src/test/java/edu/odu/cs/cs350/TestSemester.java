@@ -9,18 +9,26 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 class TestSemester {
    
         public String semesterName;
+        public String pathToDir;
+        public String pathToDatesFile;
+        public String pathToCsvFile;
         public String urlPathToSemester;
         public String strPathToSemester;
         public String enrollStart;
         public String enrollDeadline;
         public Path path;
+        public Path filePath;
         public URL url;
+        public File dateFile;
+        public File csvFile;
         
         public Semester semester1;
         public Semester semester2;
@@ -38,6 +46,11 @@ class TestSemester {
         enrollStart = "1111-01-01";
         enrollDeadline = "1111-02-02";
         path = Paths.get(strPathToSemester);
+        pathToDir = "src/test/resources";
+        pathToDatesFile = "src/test/resources/dates.txt";
+        pathToCsvFile = "src/test/resources/2020-10-05.csv";
+        dateFile = new File(pathToDatesFile);
+        csvFile = new File(pathToCsvFile);
     }
     /**
      * @throws java.net.MalformedURLException
@@ -102,5 +115,22 @@ class TestSemester {
         assertThat (semester1.getPath(), not(path));
         semester1.setPath(urlPathToSemester);
         assertThat (semester1.getPath(), is(semester2.getPath()));
+    }
+    /**
+     * @throws java.io.IOException
+     * @todo Still need to add a few tests.
+     */
+    @Test
+    public void testFetchFiles() throws IOException {
+        semester1.setPath(pathToDir);
+        assertThat (semester1.getPath().toString(), is(pathToDir));
+        System.out.println(semester1.getPath());
+        semester1.fetchFiles();
+    }
+    @Test
+    public void testSetDates() {
+        semester1.setDates(dateFile);
+        assertThat (semester1.getPreRegDate(), is("2020-10-19"));
+        assertThat (semester1.getAddDeadline(), is("2021-01-26"));
     }
 }
