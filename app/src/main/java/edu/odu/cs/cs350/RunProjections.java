@@ -60,6 +60,8 @@ public class RunProjections {
         return url;
     }
 
+
+    
     public static void main(String[] args) {
     	
     	List<Semester> semesterList = new ArrayList<>();
@@ -73,9 +75,14 @@ public class RunProjections {
     	for (int i = 0; i < args.length; i++)
     	{
     		semesterList.add(new Semester());
-    		semesterList.get(i).setPath(args[i]);
+	    		try {
+	    		    semesterList.get(i).setPath(args[i]);
+	    		} catch (MalformedURLException e) {
+    		  
+    		}
     		
     	}
+    	
         RunProjections prog = new RunProjections();
         URL url = prog.getURL(args[0]);        	
         System.out.println(prog.getGreeting());      
