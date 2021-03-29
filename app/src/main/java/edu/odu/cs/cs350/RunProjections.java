@@ -4,63 +4,43 @@
 package edu.odu.cs.cs350;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.net.HttpURLConnection;
+import java.util.*;
+import java.io.File;
 
 
 public class RunProjections {
     public String getGreeting() {
         return "Hello World!";
     }
-
-    public URL getURL(String urlStr){
-        // begin code from https://www.baeldung.com/java-check-url-exists
-        URL url;
-        int responseCode;
-        try {
-            url = new URL(urlStr);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        //URLConnection urlCon = url.openConnection();
-        HttpURLConnection urlCon = null;
-
-        try {
-            urlCon = (HttpURLConnection) url.openConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            urlCon.setRequestMethod("HEAD");
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-        try {
-            responseCode = urlCon.getResponseCode();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        //end code from https://www.baeldung.com/java-check-url-exists
-
-        if (urlCon.HTTP_NOT_FOUND ==  responseCode) {
-            System.err.println("Invalid inout");
-            return null;
-        }
-        return url;
-    }
-
+     
     public static void main(String[] args) {
+    	
+    	List<Semester> semesterList = new ArrayList<>();
+    	
+    	if(args.length < 1)
+    	{
+    		System.err.println("Invalid directory path/URL");
+    		System.exit(1);
+    	}  
+    	
+    	for (int i = 0; i < args.length; i++)
+    	{
+    		semesterList.add(new Semester());
+	    		try {
+	    		    semesterList.get(i).setPath(args[i]);
+	    		} catch (MalformedURLException e) {
+    		  
+    		}
+    		
+    	}
+    	
         RunProjections prog = new RunProjections();
-        URL url = prog.getURL(args[0]);
-        System.out.println(prog.getGreeting());
+//        URL url = prog.getURL(args[0]);        	
+        System.out.println(prog.getGreeting());      
+        
     }
 }

@@ -7,11 +7,22 @@ public class SummaryProjectionReport{
 	public SummaryProjectionReport(){       
 		this.ProjectionResults = new ArrayList<CourseProjection>();
 	}
-	 
+
+	/**
+	 *
+	 * @param course The course to be added
+	 * @see			 CourseProjection
+	 */
 	public void addCourse(CourseProjection course) {
-		ProjectionResults.add(course);
+		int index = 0;
+		for (index = 0; index < ProjectionResults.size(); index++){
+			if (ProjectionResults.get(index).getName().compareTo(course.getName()) > 0) {
+				break;
+			}
+		}
+		ProjectionResults.add(index, course);
 	}
-	
+
 	public List<CourseProjection> getProjectionResults(){
 		return ProjectionResults;
 	}
