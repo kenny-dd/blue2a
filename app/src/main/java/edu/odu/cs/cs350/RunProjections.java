@@ -19,7 +19,7 @@ public class RunProjections {
     	detailedReport = new DetailedProjectionReport();
 	}
      
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Throwable {
     	
     	List<Semester> semesterList = new ArrayList<>();
     	

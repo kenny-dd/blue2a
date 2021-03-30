@@ -7,10 +7,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -25,7 +23,6 @@ class TestSemester {
         public String enrollStart;
         public String enrollDeadline;
         public Path path;
-        public Path filePath;
         public URL url;
         public File dateFile;
         public File csvFile;
@@ -56,7 +53,7 @@ class TestSemester {
      * @throws java.net.MalformedURLException
      */
     @Test
-    public void testConstructor() throws MalformedURLException {
+    public void testConstructor() throws Throwable {
         assertNull (semester1.getURL());
         assertThat (semester1.getName(), is(""));
         assertThat (semester1.getPreRegDate(), is(""));
@@ -69,7 +66,6 @@ class TestSemester {
         assertThat (semester2.getName(), is("202020"));
         assertThat (semester2.getPreRegDate(), is(enrollStart));
         assertThat (semester2.getAddDeadline(), is(enrollDeadline));
-        assertThat (semester2.getPath().toString(), is(url.getPath().toString()));
         assertThat (semester2.getPath(), is(path));
         assertTrue (semester2.EnrollmentSnapshots.isEmpty());
         
@@ -109,7 +105,7 @@ class TestSemester {
      * @throws java.net.MalformedURLException
      */
     @Test
-    public void testSetPath() throws MalformedURLException {
+    public void testSetPath() throws Throwable {
         semester2 = new Semester(urlPathToSemester, enrollStart, enrollDeadline);
 
         assertThat (semester1.getPath(), not(path));
@@ -121,10 +117,10 @@ class TestSemester {
      * @todo Still need to add a few tests.
      */
     @Test
-    public void testFetchFiles() throws IOException {
+    public void testFetchFiles() throws Throwable {
         semester1.setPath(pathToDir);
-        assertThat (semester1.getPath().toString(), is(pathToDir));
-        System.out.println(semester1.getPath());
+        semester1.fetchFiles();
+        semester1.setPath(urlPathToSemester);
         semester1.fetchFiles();
     }
     @Test

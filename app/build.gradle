@@ -31,8 +31,10 @@ dependencies {
     implementation 'com.opencsv:opencsv:5.3'
     
     // This dependency is used by the application for reading/writing Excel Spreadsheets
-    implementation 'org.apache.poi:poi:5.0.0'   
-    implementation 'org.apache.poi:poi-ooxml:5.0.0'
+    implementation 'org.apache.poi:poi:5.0.0','org.apache.poi:poi-ooxml:5.0.0'
+
+    // This dependency is used for parsing web pages given by a link
+    implementation 'org.jsoup:jsoup:1.13.1'
 }
 
 application {

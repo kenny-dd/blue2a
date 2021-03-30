@@ -15,18 +15,26 @@ import java.util.List;
 import java.util.stream.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import org.apache.commons.io.FileUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 public class Semester {
     // Default Constructor
     public Semester() {
-		    this.name = "";
+        this.isURL = false;
+        this.name = "";
         this.preRegDate = "";
         this.addDeadline = "";
         this.EnrollmentSnapshots = new ArrayList<ArrayList<EnrollmentSnapshot>>();
     }
-    public Semester(String semesterPath, String preRegDate, String addDeadline) throws MalformedURLException {
-        this.name = semesterPath.substring(semesterPath.lastIndexOf('/')+1, semesterPath.length());
+    public Semester(String semesterPath, String preRegDate, String addDeadline) throws Throwable {
+        this.isURL = false;
+        setName(semesterPath);
         this.preRegDate = preRegDate;
         this.addDeadline = addDeadline;
         this.EnrollmentSnapshots = new ArrayList<ArrayList<EnrollmentSnapshot>>();
@@ -57,7 +65,8 @@ public class Semester {
      * the last item in the supplied path, which is the last 6 characters.
      */
     public void setName(String semesterPath) {
-        this.name = semesterPath.substring(semesterPath.lastIndexOf('/')+1, semesterPath.length());
+        String [] tokens = semesterPath.split("[\\\\|/]");
+        this.name = tokens[tokens.length - 1];
     }
     public void setPreRegDate(String date) {
         this.preRegDate = date;
@@ -67,9 +76,9 @@ public class Semester {
     }
     /**
      * Sets path for semester class. 
-     * Can take a URL or standard unix path.
+     * Can take a URL or system path.
      */
-    public String setPath(String semesterDirPath) throws MalformedURLException {
+    public boolean setPath(String semesterDirPath) throws Throwable {
         String s = semesterDirPath.trim().toLowerCase();
         boolean isURL = s.startsWith("http://") || s.startsWith("https://");
         if (isURL) {
@@ -81,13 +90,14 @@ public class Semester {
             }
             finally {
                 this.pathToSemesterDir = Paths.get(this.url.getPath());
-                return "URL";
+                this.isURL = true;
             }
         }
         else {
             this.pathToSemesterDir = Paths.get(semesterDirPath);
-            return "notURL";
+            this.isURL = false;
         }
+        return this.isURL;
     }
     /**
      * Instantiate the pre registration and add deadline dates,
@@ -112,29 +122,59 @@ public class Semester {
     }
     /**
      * Fetch all relevant csv files and the "dates.txt" file
-     * from the semester's directory. 
+     * from the semester's directory.
+     * The directory can be a URL or system path.
      * Each csv file is put into the csvFiles list.
      * If the file doesnt exist, or any other issue is encountered,
      * an IOException is thrown.
      */
     public List<File> fetchFiles() throws IOException { 
         this.csvFiles = new ArrayList<File>();
-        try(Stream<Path> pathToFiles = Files.walk(this.pathToSemesterDir)) {
-            pathToFiles.forEach(filePath -> {
-                if(filePath.toString().endsWith(".csv")) {
-                    System.out.println("Csv file: " + filePath);
-                    String tmpFileName = filePath.toString(); 
-                    File tmpCsvFile = new File(tmpFileName.substring(tmpFileName.lastIndexOf('/')+1, tmpFileName.length()));
-                    this.csvFiles.add(tmpCsvFile);
-                    System.out.println(csvFiles.get(0));
+        if(this.isURL) {
+
+            Document site = Jsoup.connect(this.url.toString()).get();
+            Elements files = site.select("a[href]");
+
+            System.out.println("Number of files in URL: " + files.size());
+            System.out.println("Fetching files from " + this.url + "...");
+            for(Element file: files) {
+
+                if (file.text().endsWith(".csv")) {
+                    File csvFile;
+                    FileUtils.copyURLToFile(new URL(file.attr("abs:href")), csvFile =  new File(file.text()));
+                    this.csvFiles.add(csvFile);
                 }
-                else if(filePath.toString().endsWith("dates.txt")) {
-                    System.out.println("dates.txt file: " + filePath);
-                    String tmpFileName = filePath.toString(); 
-                    this.dates = new File(tmpFileName.substring(tmpFileName.lastIndexOf('/')+1, tmpFileName.length()));
+                if (file.text().endsWith("dates.txt")) {
+                    File datesFile;
+                    FileUtils.copyURLToFile(new URL(file.attr("abs:href")), datesFile =  new File(file.text()));
+                    this.dates = datesFile;
                 }
-            });
-        } 
+            }
+            System.out.println("Done.");
+        }
+        else if(!this.isURL) {
+
+            System.out.println("Fetching files from " + this.pathToSemesterDir + "...");
+            try(Stream<Path> pathToFiles = Files.walk(this.pathToSemesterDir)) {
+
+                pathToFiles.forEach(filePath -> {
+                    String[] tokens = filePath.toString().split("[\\\\|/]");
+                    String filename;
+                    if(filePath.toString().endsWith(".csv")) {
+
+                        filename = tokens[tokens.length - 1];
+                        File tmpCsvFile = new File(filename);
+                        this.csvFiles.add(tmpCsvFile);
+                    }
+                    else if(filePath.toString().endsWith("dates.txt")) {
+
+                        filename = tokens[tokens.length - 1];
+                        this.dates = new File(filename);
+                    }
+                });
+                System.out.println("Done.");
+            }
+        }
         return this.csvFiles;
     }
 
@@ -149,6 +189,7 @@ public class Semester {
     }
     
     // Data members
+    private boolean isURL;
     private String name;
     private String semesterPath;
     private String preRegDate;

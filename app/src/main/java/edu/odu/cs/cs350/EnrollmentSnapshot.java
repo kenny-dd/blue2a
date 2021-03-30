@@ -9,16 +9,16 @@ import com.opencsv.bean.CsvBindByName;
  */
 public class EnrollmentSnapshot implements java.io.Serializable {
     
-    @CsvBindByName(column = "CRN", required = true)
+    @CsvBindByName(column = "CRN")
     private int CRN;
 
-    @CsvBindByName(column = "SUBJ", required = true)
+    @CsvBindByName(column = "SUBJ")
     private String SUBJ;
 
-    @CsvBindByName(column = "CRSE", required = true)
+    @CsvBindByName(column = "CRSE")
     private int CRSE;
     
-    @CsvBindByName(column = "XLST CAP", required = true)
+    @CsvBindByName(column = "XLST CAP")
     private int XLST_CAP;
 
     @CsvBindByName(column = "ENR")
