@@ -17,18 +17,19 @@ public class DetailedProjectionReport {
 	//Default Constructor
 	public DetailedProjectionReport () {
 		
-		//this.filePath="";
+		this.filePath="";
 		
 		
 	}
 	//gets and sets output file path 
-	public Path GetFilePath() {
+	public String GetFilePath() {
 		return filePath;
 	}
 	
-	public void setPath(Path newFilePath) {
+	public void setPath(String newFilePath) {
 		
 		this.filePath=newFilePath;
+	
 	}
 	
 	
@@ -55,7 +56,7 @@ public class DetailedProjectionReport {
 	}
 	
 	//takes in output file path and creates an excel workbook based on version specified by CLI. 
-	public static void outputviaCLI(String tempfilePath, Path filePath) throws IOException
+	public static void outputviaCLI(String filePath) throws IOException
 	{
 		
 		Console c = System.console();
@@ -66,16 +67,16 @@ public class DetailedProjectionReport {
 			System.exit(1);
 		}
 		
-		tempfilePath=c.readLine("Please specify a Location for the output file: ");
+		filePath=c.readLine("Please specify a Location for the output file: ");
 		
-		filePath=Paths.get(tempfilePath);
+		//filePath=Paths.get(tempfilePath);
 		
 		
 		//  Workbook workbook = null;
 		  
 		    if (filePath.endsWith("xlsx")) {
 		 //       workbook = new XSSFWorkbook(filePath);
-		  //  } else if (filename.endsWith("xls")) {
+		    } else if (filePath.endsWith("xls")) {
 		  //      workbook = new HSSFWorkbook(filePath);
 		    } else {
 		        throw new IllegalArgumentException("The specified file is not Excel file");
@@ -85,8 +86,8 @@ public class DetailedProjectionReport {
 		
 	}
 	
-	private Path filePath;
-	
+	private String filePath;
+	private String newFilePath;
 	
 	
 }

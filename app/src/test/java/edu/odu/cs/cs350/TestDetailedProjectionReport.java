@@ -17,7 +17,8 @@ public class TestDetailedProjectionReport {
 	
  public DetailedProjectionReport DetailedProjectionReport1;
  public DetailedProjectionReport DetailedProjectionReport2;
-public Path path;
+public String path;
+public Path RealPath;
 public String tempPath;	
 	
 	
@@ -26,7 +27,7 @@ public String tempPath;
 	  
   DetailedProjectionReport1= new DetailedProjectionReport();
   tempPath= "C:/users/OutputFiles";
-  path = Paths.get(tempPath);
+  //path = Paths.get(tempPath);
   
   
   }
@@ -43,7 +44,7 @@ public String tempPath;
   @Test
   public void testSetFilePath() {
 	  assertThat(DetailedProjectionReport1.GetFilePath(), is(""));
-	  DetailedProjectionReport1.setPath(path);
+	  DetailedProjectionReport1.setPath(tempPath);
 	  assertThat(DetailedProjectionReport1.GetFilePath(), is("C:/users/OutputFiles"));
   }
 
@@ -52,7 +53,8 @@ public String tempPath;
 	  DetailedProjectionReport1.setPath(path);
       assertThat (DetailedProjectionReport1.GetFilePath().toString(), is(path));
       System.out.println(DetailedProjectionReport1.GetFilePath());
-     assertThat(DetailedProjectionReport1.GetFilePath(), is(Files.walk(this.path)));
+     RealPath=Paths.get(path);
+      assertThat(DetailedProjectionReport1.GetFilePath(), is(Files.walk(this.RealPath)));
 	   
   }
   
