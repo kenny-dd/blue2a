@@ -13,19 +13,39 @@ public class TestDetailedProjectionReport {
 	
  public DetailedProjectionReport DetailedProjectionReport1;
  public DetailedProjectionReport DetailedProjectionReport2;
-	
+public String path;
 	
 	
 	
   @BeforeEach
   public void setUp() throws Exception {
-	  //TODO Any initialization of those shared data members
+	  
+  DetailedProjectionReport1= new DetailedProjectionReport();
+  path = "C:/users/OutputFiles";
+  
+  
   }
 
   
+   @Test 
+   public void TestDPRConstructor () {
+	 
+	 assertThat (DetailedProjectionReport1.GetFilepath(), is(""));
+	 
+   
+   }
+  
+  
+  
+  
+  
   @Test
-  public void testSetFileName() {
-	  //TODO first of your test cases
+  public void testSetFilePath() {
+	  assertThat(DetailedProjectionReport1.GetFilepath(), is(""));
+	  DetailedProjectionReport1.setPath(path);
+	  assertThat(DetailedProjectionReport1.GetFilepath(), is("C:/users/OutputFiles"));
+  
+  
   }
 
 
