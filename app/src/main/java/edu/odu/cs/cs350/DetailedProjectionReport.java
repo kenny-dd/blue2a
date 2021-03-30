@@ -1,5 +1,6 @@
 package edu.odu.cs.cs350;
 
+import java.io.*;
 import java.io.FileOutputStream;
 import java.io.Console;
 import java.io.IOException;
@@ -7,23 +8,25 @@ import java.io.IOException;
 //import org.apache.poi.ss.usermodel.Row;
 //import org.apache.poi.xssf.usermodel.XSSFSheet;
 //import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 public class DetailedProjectionReport {
 	
-	
+	//Default Constructor
 	public DetailedProjectionReport () {
 		
-		this.filePath="";
+		//this.filePath="";
 		
 		
 	}
-	
-	public String GetFilepath() {
+	//gets and sets output file path 
+	public Path GetFilePath() {
 		return filePath;
 	}
 	
-	public void setPath(String newFilePath) {
+	public void setPath(Path newFilePath) {
 		
 		this.filePath=newFilePath;
 	}
@@ -31,28 +34,28 @@ public class DetailedProjectionReport {
 	
 	
 	
-	public static void GenerateHistoricalGraph() {
+	public void GenerateHistoricalGraph() {
 		
 		
 		
 		
 	}
 	
-	public static void GenerateCurrentGraph() {
+	public void GenerateCurrentGraph() {
 		
 		
 		
 	}
 	
 	
-	public static void GenerateProjectionGraph() {
+	public void GenerateProjectionGraph() {
 		
 		
 		
 	}
 	
-	
-	public static void outputviaCLI(String filePath) throws IOException
+	//takes in output file path and creates an excel workbook based on version specified by CLI. 
+	public static void outputviaCLI(String tempfilePath, Path filePath) throws IOException
 	{
 		
 		Console c = System.console();
@@ -63,7 +66,10 @@ public class DetailedProjectionReport {
 			System.exit(1);
 		}
 		
-		filePath= c.readLine("Please specify a Location for the output file: ");
+		tempfilePath=c.readLine("Please specify a Location for the output file: ");
+		
+		filePath=Paths.get(tempfilePath);
+		
 		
 		//  Workbook workbook = null;
 		  
@@ -79,7 +85,7 @@ public class DetailedProjectionReport {
 		
 	}
 	
-	private String filePath;
+	private Path filePath;
 	
 	
 	
