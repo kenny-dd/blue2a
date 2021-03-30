@@ -20,13 +20,14 @@ public class TestDetailedProjectionReport {
 public String path;
 public Path RealPath;
 public String tempPath;	
-	
+public String XLSX;	
 	
   @BeforeEach
   public void setUp() throws Exception {
 	  
   DetailedProjectionReport1= new DetailedProjectionReport();
   tempPath= "C:/users/OutputFiles";
+  XLSX="C:users/OutPutFiles/test.xlsx";
   //path = Paths.get(tempPath);
   
   
@@ -52,8 +53,7 @@ public String tempPath;
   public void TestoutputViaCLI() throws IOException {
 	  DetailedProjectionReport1.setPath(path);
       assertThat (DetailedProjectionReport1.GetFilePath().toString(), is(path));
-      System.out.println(DetailedProjectionReport1.GetFilePath());
-     RealPath=Paths.get(path);
+      RealPath=Paths.get(XLSX);
       assertThat(DetailedProjectionReport1.GetFilePath(), is(Files.walk(this.RealPath)));
 	   
   }

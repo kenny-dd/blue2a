@@ -4,10 +4,12 @@ import java.io.*;
 import java.io.FileOutputStream;
 import java.io.Console;
 import java.io.IOException;
-//import org.apache.poi.ss.usermodel.Cell;
-//import org.apache.poi.ss.usermodel.Row;
-//import org.apache.poi.xssf.usermodel.XSSFSheet;
-//import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -72,17 +74,17 @@ public class DetailedProjectionReport {
 		//filePath=Paths.get(tempfilePath);
 		
 		
-		//  Workbook workbook = null;
+		  //XSSFWorkbook workbook;
 		  
 		    if (filePath.endsWith("xlsx")) {
-		 //       workbook = new XSSFWorkbook(filePath);
+		       XSSFWorkbook workbook = new XSSFWorkbook(filePath);
 		    } else if (filePath.endsWith("xls")) {
-		  //      workbook = new HSSFWorkbook(filePath);
+		       HSSFWorkbook workbook = new HSSFWorkbook();
 		    } else {
 		        throw new IllegalArgumentException("The specified file is not Excel file");
 		    }
 		 
-		  //  return workbook;
+		   //return workbook;
 		
 	}
 	
