@@ -4,6 +4,7 @@
 package edu.odu.cs.cs350;
 
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.*;
 
@@ -11,22 +12,24 @@ import java.util.*;
 public class RunProjections {
 
 	private SummaryProjectionReport summaryReport;
+	private DetailedProjectionReport detailedReport;
 
     public RunProjections() {
     	summaryReport = new SummaryProjectionReport();
+    	detailedReport = new DetailedProjectionReport();
 	}
      
     public static void main(String[] args) {
     	
     	List<Semester> semesterList = new ArrayList<>();
     	
-    	if(args.length < 1)
+    	if(args.length < 2)
     	{
-    		System.err.println("Invalid directory path/URL");
+    		System.err.println("Not enough parameters passed to program.");
     		System.exit(1);
     	}  
     	
-    	for (int i = 0; i < args.length; i++)
+    	for (int i = 0; i < args.length - 1; i++)
     	{
     		semesterList.add(new Semester());
 			try {
@@ -35,10 +38,16 @@ public class RunProjections {
 				//Does not throw error when invalid URL is passed yet
     		  	System.err.println("Invalid URL passed: " + args[i]);
     		}
-    		
     	}
-    	
-        RunProjections prog = new RunProjections();
+
+		RunProjections prog = new RunProjections();
+
+		try {
+			prog.detailedReport.outputviaCLI(args[args.length-1]);
+		} catch (IOException e) {
+			//Do something
+		}
+
     	//Automate this later when the projections are actually being calculated.
     	prog.summaryReport.addCourse(new CourseProjection("CS120G", 46, 104, 120));
 		prog.summaryReport.addCourse(new CourseProjection("CS121G", 32, 86, 100));
