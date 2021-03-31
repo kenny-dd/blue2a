@@ -152,7 +152,7 @@ public class Semester {
             }
             System.out.println("Done.");
         }
-        else if(!this.isURL) {
+        else {
 
             System.out.println("Fetching files from " + this.pathToSemesterDir + "...");
             try(Stream<Path> pathToFiles = Files.walk(this.pathToSemesterDir)) {
