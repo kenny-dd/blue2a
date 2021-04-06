@@ -59,13 +59,17 @@ public class DetailedProjectionReport {
 	//takes in output file path and creates an excel workbook based on version specified by CLI. 
 	public void outputviaCLI(String filePath) throws IOException
 	{
+		XSSFWorkbook workbook;
+		
 		try {
 			File directory = new File(filePath);
 			if (!directory.exists()) {
 				directory.mkdir();
 			}
 
-			output = new File(filePath + "/report.xlsx");
+			
+			workbook = new XSSFWorkbook(filePath + "/report");
+			//output = workbook;
 
 			if (output.createNewFile()) {
 				//File was created successfully
@@ -73,19 +77,19 @@ public class DetailedProjectionReport {
 				//File already exists overwrite it
 			}
 		} catch (IOException e) {
-			System.err.println("Error occured when creating file " + filePath + "/report.xlsx");
+			System.err.println("Error occured when creating file " + filePath + "/report");
 		}
 
 		//Come back to this later
 	  	//XSSFWorkbook workbook;
 
-//		if (filePath.endsWith("xlsx")) {
-//		   XSSFWorkbook workbook = new XSSFWorkbook(filePath);
-//		} else if (filePath.endsWith("xls")) {
-//		   HSSFWorkbook workbook = new HSSFWorkbook();
-//		} else {
-//			throw new IllegalArgumentException("The specified file is not Excel file");
-//		}
+		//if (filePath.endsWith("xlsx")) {
+		    //workbook = new XSSFWorkbook(filePath);
+		//} else if (filePath.endsWith("xls")) {
+		   // workbook = new HSSFWorkbook();
+	//}// else {
+		//throw new IllegalArgumentException("The specified file is not Excel file");
+	//}
 
 	   //return workbook;
 		
