@@ -1,5 +1,8 @@
 package edu.odu.cs.cs350;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CourseProjection {
     //Default Constructor
     public CourseProjection() {
@@ -7,6 +10,7 @@ public class CourseProjection {
         this.enrollmentCount = 0;
         this.projectedCount = 0;
         this.courseCap = 0;
+        this.historicValues = new ArrayList<>();
     };
 
     public CourseProjection(String name, int enrollmentCount, int projectedEnrollment, int enrollmentCap) {
@@ -14,6 +18,7 @@ public class CourseProjection {
         this.enrollmentCount = enrollmentCount;
         this.projectedCount = projectedEnrollment;
         this.courseCap = enrollmentCap;
+        this.historicValues = new ArrayList<>();
     }
 
     @Override
@@ -56,9 +61,24 @@ public class CourseProjection {
         this.courseCap = newCap;
     }
 
+    public void addHistoricValue(double index, int count) {
+
+    }
+
+    public int getHistoricValue(double index) {
+
+        return -1;
+    }
+
+    public List<Integer> getHistoricValuesList() {
+        return null;
+    }
+
     //Data members
     private String name;
     private int enrollmentCount;
     private int projectedCount;
     private int courseCap;
+
+    private List<Integer> historicValues;
 }

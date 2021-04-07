@@ -88,4 +88,24 @@ class TestCourseProjection {
         assertEquals(" CS120G 46         104       125", cp.toString());
     }
 
+    //Test Setting historical enrollment value
+    @Test
+    void testAddHistoricValue() {
+        CourseProjection cp = new CourseProjection("CS120G", 46, 104, 120);
+
+        cp.addHistoricValue(0.5, 40);
+        cp.addHistoricValue(0.76, 50);
+
+        assertEquals(46, cp.getEnrollmentCount());
+        assertEquals(104, cp.getProjectionCount());
+        assertEquals(120, cp.getCourseCap());
+        assertEquals(40, cp.getHistoricValue(0.5));
+        assertEquals(50, cp.getHistoricValue(0.76));
+        assertEquals(2, cp.getHistoricValuesList().size());
+        assertEquals("CS120G", cp.getName());
+        assertEquals(" CS120G 46         104       120", cp.toString());
+    }
+
+
+
 }
