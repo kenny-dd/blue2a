@@ -1,7 +1,6 @@
 package edu.odu.cs.cs350;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class CourseProjection {
     //Default Constructor
@@ -10,7 +9,7 @@ public class CourseProjection {
         this.enrollmentCount = 0;
         this.projectedCount = 0;
         this.courseCap = 0;
-        this.historicValues = new ArrayList<>();
+        this.historicValues = new HashMap<>();
     };
 
     public CourseProjection(String name, int enrollmentCount, int projectedEnrollment, int enrollmentCap) {
@@ -18,7 +17,7 @@ public class CourseProjection {
         this.enrollmentCount = enrollmentCount;
         this.projectedCount = projectedEnrollment;
         this.courseCap = enrollmentCap;
-        this.historicValues = new ArrayList<>();
+        this.historicValues = new HashMap<>();
     }
 
     @Override
@@ -62,16 +61,19 @@ public class CourseProjection {
     }
 
     public void addHistoricValue(double index, int count) {
-
+        historicValues.put(index, count);
     }
 
     public int getHistoricValue(double index) {
+        if (historicValues.containsKey(index)) {
+            return historicValues.get(index);
+        }
 
         return -1;
     }
 
-    public List<Integer> getHistoricValuesList() {
-        return null;
+    public HashMap<Double, Integer> getHistoricValuesList() {
+        return historicValues;
     }
 
     //Data members
@@ -80,5 +82,5 @@ public class CourseProjection {
     private int projectedCount;
     private int courseCap;
 
-    private List<Integer> historicValues;
+    private HashMap<Double, Integer> historicValues;
 }
