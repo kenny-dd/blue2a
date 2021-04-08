@@ -10,17 +10,17 @@ public class CourseProjection {
 
     public CourseProjection(String name, int enrollmentCount, int projectedEnrollment, int enrollmentCap) {
         this.name = name;
-        this.enrollmentCount = enrollmentCount;
         this.projectedCount = projectedEnrollment;
         this.courseCap = enrollmentCap;
         this.historicValues = new HashMap<>();
         this.currentValues = new HashMap<>();
+        currentValues.put(0.0, enrollmentCount);
     }
 
     @Override
     public String toString() {
         char overflowMarker = this.projectedCount > this.courseCap ? '*' : ' ';
-        return String.format("%c%-6s %-10d %-9d %-3d", overflowMarker, this.name, this.enrollmentCount, this.projectedCount, this.courseCap);
+        return String.format("%c%-6s %-10d %-9d %-3d", overflowMarker, this.name, this.getEnrollmentCount(), this.projectedCount, this.courseCap);
     }
 
     // Accessor methods
@@ -29,7 +29,15 @@ public class CourseProjection {
     }
 
     public int getEnrollmentCount() {
-        return enrollmentCount;
+        if (currentValues.size() == 0) {
+            return 0;
+        }
+
+        double max = -1.0;
+        for (Double key : currentValues.keySet()) {
+            max = (key > max) ? key : max;
+        }
+        return currentValues.get(max);
     }
 
     public int getProjectionCount() {
@@ -43,10 +51,6 @@ public class CourseProjection {
     // Mutators
     public void setName(String newName) {
         this.name = newName;
-    }
-
-    public void setEnrollmentCount(int newCount) {
-        this.enrollmentCount = newCount;
     }
 
     public void setProjectedCount(int newCount) {
@@ -74,16 +78,18 @@ public class CourseProjection {
     }
 
     public void addCurrentValue(double index, int value){
-
+        currentValues.put(index, value);
     }
 
     public int getCurrentValue(double index) {
-
+        if (currentValues.containsKey(index)){
+            return currentValues.get(index);
+        }
         return -1;
     }
 
     public HashMap<Double, Integer> getCurrentValues() {
-        return null;
+        return currentValues;
     }
 
     //Data members

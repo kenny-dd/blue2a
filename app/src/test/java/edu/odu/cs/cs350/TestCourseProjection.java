@@ -46,19 +46,7 @@ class TestCourseProjection {
         assertEquals(" CS121G 46         104       120", cp.toString());
     }
 
-    //Test setting the enrollmentCount
-    @Test
-    void testSetEnrollmentCount() {
-        CourseProjection cp = new CourseProjection("CS120G", 46, 104, 120);
 
-        cp.setEnrollmentCount(80);
-
-        assertEquals(80, cp.getEnrollmentCount());
-        assertEquals(104, cp.getProjectionCount());
-        assertEquals(120, cp.getCourseCap());
-        assertEquals("CS120G", cp.getName());
-        assertEquals(" CS120G 80         104       120", cp.toString());
-    }
 
     //Test setting the projected enrollment
     @Test
@@ -114,13 +102,13 @@ class TestCourseProjection {
         cp.addCurrentValue(0.5, 55);
         cp.addCurrentValue(0.85, 100);
 
-        assertEquals(55, cp.getEnrollmentCount());
+        assertEquals(100, cp.getEnrollmentCount());
         assertEquals(104, cp.getProjectionCount());
         assertEquals(120, cp.getCourseCap());
         assertEquals(55, cp.getCurrentValue(0.5));
         assertEquals(100, cp.getCurrentValue(0.85));
-        assertEquals(2, cp.getCurrentValues().size());
-        assertEquals(" CS120G 46         104       120", cp.toString());
+        assertEquals(3, cp.getCurrentValues().size());
+        assertEquals(" CS120G 100        104       120", cp.toString());
     }
 
 }
