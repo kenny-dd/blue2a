@@ -5,11 +5,7 @@ import java.util.HashMap;
 public class CourseProjection {
     //Default Constructor
     public CourseProjection() {
-        this.name = "";
-        this.enrollmentCount = 0;
-        this.projectedCount = 0;
-        this.courseCap = 0;
-        this.historicValues = new HashMap<>();
+        this("", 0, 0, 0);
     };
 
     public CourseProjection(String name, int enrollmentCount, int projectedEnrollment, int enrollmentCap) {
@@ -18,6 +14,7 @@ public class CourseProjection {
         this.projectedCount = projectedEnrollment;
         this.courseCap = enrollmentCap;
         this.historicValues = new HashMap<>();
+        this.currentValues = new HashMap<>();
     }
 
     @Override
@@ -76,6 +73,19 @@ public class CourseProjection {
         return historicValues;
     }
 
+    public void addCurrentValue(double index, int value){
+
+    }
+
+    public int getCurrentValue(double index) {
+
+        return -1;
+    }
+
+    public HashMap<Double, Integer> getCurrentValues() {
+        return null;
+    }
+
     //Data members
     private String name;
     private int enrollmentCount;
@@ -83,4 +93,5 @@ public class CourseProjection {
     private int courseCap;
 
     private HashMap<Double, Integer> historicValues;
+    private HashMap<Double, Integer> currentValues;
 }
