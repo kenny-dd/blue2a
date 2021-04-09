@@ -76,7 +76,7 @@ class TestSummaryProjectionReport {
 		assertEquals("76% of enrollment period has elapsed." + System.lineSeparator()
 				+ " Course Enrollment Projected Cap" + System.lineSeparator()
 				+ " CS120G 0          0         120" + System.lineSeparator()
-				+ "*CS121G 50         0         110" + System.lineSeparator(),
+				+ "*CS121G 50         130       110" + System.lineSeparator(),
 				outputStreamCaptor.toString());
 	}   
 	

@@ -14,6 +14,7 @@ public class CourseProjection {
         this.historicValues = new HashMap<>();
         this.currentValues = new HashMap<>();
         this.projections = new HashMap<>();
+        this.hCounts = new HashMap<>();
     }
 
     @Override
@@ -57,12 +58,21 @@ public class CourseProjection {
     }
 
     public void addHistoricValue(double index, int count) {
-        historicValues.put(index, count);
+        if (historicValues.containsKey(index)) {
+            int newVal = count + historicValues.get(index);
+            historicValues.put(index, newVal);
+            hCounts.put(index, hCounts.get(index) + 1);
+        }
+        else {
+            historicValues.put(index, count);
+            hCounts.put(index, 1);
+        }
+
     }
 
     public int getHistoricValue(double index) {
         if (historicValues.containsKey(index)) {
-            return historicValues.get(index);
+            return (int)Math.ceil(historicValues.get(index) / (double)hCounts.get(index));
         }
 
         return -1;
@@ -87,8 +97,26 @@ public class CourseProjection {
         return currentValues;
     }
 
+    /**
+     * Make a projection for the end of the enrollment period
+     */
     public void makeProjection() {
+        makeProjection(1.0);
+    }
 
+    /**
+     * Calculate the projected enrollment for a course at dateNum
+     * @param dateNum
+     */
+    public void makeProjection(double dateNum) {
+        double recentIndex = getMaxMapIndex(currentValues);
+        if (dateNum <= recentIndex) {
+            return;
+        }
+
+        //Add interpolation for historical values here.
+
+        projections.put(dateNum, (int)Math.ceil((double)currentValues.get(recentIndex) / historicValues.get(recentIndex) * historicValues.get(dateNum)));
     }
 
     private Double getMaxMapIndex(HashMap map) {
@@ -109,4 +137,6 @@ public class CourseProjection {
     private HashMap<Double, Integer> historicValues;
     private HashMap<Double, Integer> currentValues;
     private HashMap<Double, Integer> projections;
+    //Used for averaging historic enrollment values
+    private HashMap<Double, Integer> hCounts;
 }

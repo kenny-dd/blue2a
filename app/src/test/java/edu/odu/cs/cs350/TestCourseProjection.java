@@ -79,6 +79,28 @@ class TestCourseProjection {
         assertEquals(" CS120G 0          0         120", cp.toString());
     }
 
+    //Test adding historical data from multiple semesters
+    @Test
+    void testAddHistoricValueMultiple() {
+        CourseProjection cp = new CourseProjection("CS120G", 120);
+
+        cp.addHistoricValue(0.5, 40);
+        cp.addHistoricValue(0.75, 50);
+        cp.addHistoricValue(0.5, 20);
+
+        assertEquals(0, cp.getEnrollmentCount());
+        assertEquals(0, cp.getProjectionCount());
+        assertEquals(120, cp.getCourseCap());
+        assertEquals(30, cp.getHistoricValue(0.5));
+        assertEquals(50, cp.getHistoricValue(0.75));
+        assertEquals(2, cp.getHistoricValuesList().size());
+        assertNotNull(cp.getCurrentValues());
+        assertEquals(0, cp.getCurrentValues().size());
+        assertEquals("CS120G", cp.getName());
+        assertEquals(" CS120G 0          0         120", cp.toString());
+
+    }
+
     //Test Setting a current enrollment value
     @Test
     void testAddCurrentValue() {
