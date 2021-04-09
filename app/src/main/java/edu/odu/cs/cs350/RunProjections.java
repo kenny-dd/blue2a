@@ -49,10 +49,10 @@ public class RunProjections {
 		}
 
     	//Automate this later when the projections are actually being calculated.
-    	prog.summaryReport.addCourse(new CourseProjection("CS120G", 46, 104, 120));
-		prog.summaryReport.addCourse(new CourseProjection("CS121G", 32, 86, 100));
-		prog.summaryReport.addCourse(new CourseProjection("CS170G", 55, 88, 75));
-		prog.summaryReport.addCourse(new CourseProjection("CS150", 70, 104, 130));
+    	prog.summaryReport.addCourse(new CourseProjection("CS120G", 120));
+		prog.summaryReport.addCourse(new CourseProjection("CS121G", 100));
+		prog.summaryReport.addCourse(new CourseProjection("CS170G", 75));
+		prog.summaryReport.addCourse(new CourseProjection("CS150", 130));
     	prog.summaryReport.displayProjectionResults();
         
     }

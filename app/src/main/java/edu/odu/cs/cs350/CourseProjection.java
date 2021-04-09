@@ -5,22 +5,21 @@ import java.util.HashMap;
 public class CourseProjection {
     //Default Constructor
     public CourseProjection() {
-        this("", 0, 0, 0);
+        this("", 0);
     };
 
-    public CourseProjection(String name, int enrollmentCount, int projectedEnrollment, int enrollmentCap) {
+    public CourseProjection(String name, int enrollmentCap) {
         this.name = name;
-        this.projectedCount = projectedEnrollment;
         this.courseCap = enrollmentCap;
         this.historicValues = new HashMap<>();
         this.currentValues = new HashMap<>();
-        currentValues.put(0.0, enrollmentCount);
+        this.projections = new HashMap<>();
     }
 
     @Override
     public String toString() {
-        char overflowMarker = this.projectedCount > this.courseCap ? '*' : ' ';
-        return String.format("%c%-6s %-10d %-9d %-3d", overflowMarker, this.name, this.getEnrollmentCount(), this.projectedCount, this.courseCap);
+        char overflowMarker = this.getProjectionCount() > this.courseCap ? '*' : ' ';
+        return String.format("%c%-6s %-10d %-9d %-3d", overflowMarker, this.name, this.getEnrollmentCount(), this.getProjectionCount(), this.courseCap);
     }
 
     // Accessor methods
@@ -33,15 +32,15 @@ public class CourseProjection {
             return 0;
         }
 
-        double max = -1.0;
-        for (Double key : currentValues.keySet()) {
-            max = (key > max) ? key : max;
-        }
-        return currentValues.get(max);
+        return currentValues.get(getMaxMapIndex(currentValues));
     }
 
     public int getProjectionCount() {
-        return projectedCount;
+        if (projections.size() == 0) {
+            return 0;
+        }
+
+        return projections.get(getMaxMapIndex(projections));
     }
 
     public int getCourseCap() {
@@ -51,10 +50,6 @@ public class CourseProjection {
     // Mutators
     public void setName(String newName) {
         this.name = newName;
-    }
-
-    public void setProjectedCount(int newCount) {
-        this.projectedCount = newCount;
     }
 
     public void setCourseCap(int newCap) {
@@ -82,7 +77,7 @@ public class CourseProjection {
     }
 
     public int getCurrentValue(double index) {
-        if (currentValues.containsKey(index)){
+        if (currentValues.containsKey(index)) {
             return currentValues.get(index);
         }
         return -1;
@@ -92,12 +87,26 @@ public class CourseProjection {
         return currentValues;
     }
 
+    public void makeProjection() {
+
+    }
+
+    private Double getMaxMapIndex(HashMap map) {
+        Double max = -1.0;
+        for (Object key : map.keySet()) {
+            if ((Double)key > max) {
+                max = (Double)key;
+            }
+        }
+
+        return max;
+    }
+
     //Data members
     private String name;
-    private int enrollmentCount;
-    private int projectedCount;
     private int courseCap;
 
     private HashMap<Double, Integer> historicValues;
     private HashMap<Double, Integer> currentValues;
+    private HashMap<Double, Integer> projections;
 }

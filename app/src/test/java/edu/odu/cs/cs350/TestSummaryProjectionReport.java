@@ -30,7 +30,7 @@ class TestSummaryProjectionReport {
 
 	@Test
 	void testAdd() {
-		CourseProjection cp = new CourseProjection("CS120G", 46, 104, 120);
+		CourseProjection cp = new CourseProjection("CS120G", 120);
 		
 		spr.addCourse(cp);
 		assertTrue(spr.getProjectionResults().contains(cp));
@@ -40,9 +40,9 @@ class TestSummaryProjectionReport {
 	//Test that courses are added in order by name
 	@Test
 	void testAddOrdered() {
-		CourseProjection cp = new CourseProjection("CS120G", 46, 104, 120);
-		CourseProjection cp1 = new CourseProjection("CS121G", 32, 86, 100);
-		CourseProjection cp2 = new CourseProjection("CS170G", 55, 88, 75);
+		CourseProjection cp = new CourseProjection("CS120G", 120);
+		CourseProjection cp1 = new CourseProjection("CS121G", 100);
+		CourseProjection cp2 = new CourseProjection("CS170G", 75);
 
 		spr.addCourse(cp1);
 		spr.addCourse(cp);
@@ -51,27 +51,32 @@ class TestSummaryProjectionReport {
 		assertEquals(3, spr.getProjectionResults().size());
 
 		spr.displayProjectionResults();
-		assertEquals("76% of enrollment period has elapsed.\r\n"
-						+ " Course Enrollment Projected Cap\r\n"
-						+ " CS120G 46         104       120\r\n"
-						+ " CS121G 32         86        100\r\n"
-						+ "*CS170G 55         88        75 \r\n",
+		assertEquals("76% of enrollment period has elapsed." + System.lineSeparator()
+						+ " Course Enrollment Projected Cap" + System.lineSeparator()
+						+ " CS120G 0          0         120" + System.lineSeparator()
+						+ " CS121G 0          0         100" + System.lineSeparator()
+						+ " CS170G 0          0         75 " + System.lineSeparator(),
 				outputStreamCaptor.toString());
 	}
 	
 	@Test
 	void testDisplayResults(){
-		CourseProjection cp = new CourseProjection("CS120G", 46, 104, 120);
-		CourseProjection cpr = new CourseProjection("CS121G", 50, 130, 110);
+		CourseProjection cp = new CourseProjection("CS120G", 120);
+		CourseProjection cpr = new CourseProjection("CS121G", 110);
+
+		cpr.addCurrentValue(0.5, 50);
+		cpr.addHistoricValue(0.5, 40);
+		cpr.addHistoricValue(1.0, 104);
+		cpr.makeProjection();
 
 		spr.addCourse(cp);
 		spr.addCourse(cpr);
 
 		spr.displayProjectionResults();
-		assertEquals("76% of enrollment period has elapsed.\r\n"
-				+ " Course Enrollment Projected Cap\r\n"
-				+ " CS120G 46         104       120\r\n" 
-				+ "*CS121G 50         130       110\r\n", 
+		assertEquals("76% of enrollment period has elapsed." + System.lineSeparator()
+				+ " Course Enrollment Projected Cap" + System.lineSeparator()
+				+ " CS120G 0          0         120" + System.lineSeparator()
+				+ "*CS121G 50         0         110" + System.lineSeparator(),
 				outputStreamCaptor.toString());
 	}   
 	
@@ -79,6 +84,4 @@ class TestSummaryProjectionReport {
 	public void tearDown() {
 	    System.setOut(standardOut);
 	}
-
-
 }
