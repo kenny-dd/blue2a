@@ -3,11 +3,18 @@ package edu.odu.cs.cs350;
 import java.util.HashMap;
 
 public class CourseProjection {
-    //Default Constructor
+    /**
+     * Default Constructor
+     */
     public CourseProjection() {
         this("", 0);
     };
 
+    /**
+     * Create a course projection with a name and enrollment cap.
+     * @param name
+     * @param enrollmentCap
+     */
     public CourseProjection(String name, int enrollmentCap) {
         this.name = name;
         this.courseCap = enrollmentCap;
@@ -17,6 +24,10 @@ public class CourseProjection {
         this.hCounts = new HashMap<>();
     }
 
+    /**
+     * Create a string for this projection in the format of one line of the SPR
+     * @return
+     */
     @Override
     public String toString() {
         char overflowMarker = this.getProjectionCount() > this.courseCap ? '*' : ' ';
@@ -24,10 +35,19 @@ public class CourseProjection {
     }
 
     // Accessor methods
+
+    /**
+     * Get the name of the course being projected.
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Get the latest enrollment count for this course in the active semester
+     * @return
+     */
     public int getEnrollmentCount() {
         if (currentValues.size() == 0) {
             return 0;
@@ -36,6 +56,10 @@ public class CourseProjection {
         return currentValues.get(getMaxMapIndex(currentValues));
     }
 
+    /**
+     * Get the latest projected enrollment count for this course
+     * @return
+     */
     public int getProjectionCount() {
         if (projections.size() == 0) {
             return 0;
@@ -44,19 +68,37 @@ public class CourseProjection {
         return projections.get(getMaxMapIndex(projections));
     }
 
+    /**
+     * Get the enrollment cap for the course.
+     * @return
+     */
     public int getCourseCap() {
         return courseCap;
     }
 
     // Mutators
+
+    /**
+     * Set the name of the course being projected
+     * @param newName The string to use as the new name of the course.
+     */
     public void setName(String newName) {
         this.name = newName;
     }
 
+    /**
+     * Set the course cap to be used in this projection.
+     * @param newCap The value to be used as the course enrollment cap.
+     */
     public void setCourseCap(int newCap) {
         this.courseCap = newCap;
     }
 
+    /**
+     * Add a historic enrollment value for an index. Multiple entries at the same index will be averaged.
+     * @param index The mapped date number to add the historical value for.
+     * @param count The historical value to be added.
+     */
     public void addHistoricValue(double index, int count) {
         if (historicValues.containsKey(index)) {
             int newVal = count + historicValues.get(index);
@@ -70,6 +112,11 @@ public class CourseProjection {
 
     }
 
+    /**
+     * Get a historical enrollment average value used for the projection at the index
+     * @param index The index to get the average historical value.
+     * @return
+     */
     public int getHistoricValue(double index) {
         if (historicValues.containsKey(index)) {
             return (int)Math.ceil(historicValues.get(index) / (double)hCounts.get(index));
@@ -78,14 +125,28 @@ public class CourseProjection {
         return -1;
     }
 
+    /**
+     * Fetch the map of historical enrollment averages used in this projection.
+     * @return
+     */
     public HashMap<Double, Integer> getHistoricValuesList() {
         return historicValues;
     }
 
+    /**
+     * Add a current enrollment count to the map.
+     * @param index The mapped index for the value to be saved at.
+     * @param value The value of the current enrollment to be added at the index.
+     */
     public void addCurrentValue(double index, int value){
         currentValues.put(index, value);
     }
 
+    /**
+     * Get a current enrollment at a mapped number (0.0-1.0)
+     * @param index The mapped number to get the enrollment count from.
+     * @return
+     */
     public int getCurrentValue(double index) {
         if (currentValues.containsKey(index)) {
             return currentValues.get(index);
@@ -93,6 +154,10 @@ public class CourseProjection {
         return -1;
     }
 
+    /**
+     * Fetch the map of current enrollments from a course projection
+     * @return
+     */
     public HashMap<Double, Integer> getCurrentValues() {
         return currentValues;
     }
