@@ -29,8 +29,8 @@ public class SummaryProjectionReport{
 		return ProjectionResults;
 	}
 
-	public void displayProjectionResults() {
-		System.out.println(enrollmentPeriod("2021-01-01", "2021-01-31", "2021-01-22")
+	public void displayProjectionResults(String startDate, String endDate, String currentDate) {
+		System.out.println(enrollmentPeriod(startDate, endDate, currentDate)
 								+ "% of enrollment period has elapsed.");
 		
 		System.out.println(" Course Enrollment Projected Cap");
@@ -43,7 +43,7 @@ public class SummaryProjectionReport{
 	// Data Member
 	private List<CourseProjection> ProjectionResults;
 	
-public int enrollmentPeriod(String startDate, String endDate, String currentDate) {
+	public int enrollmentPeriod(String startDate, String endDate, String currentDate) {
 		
 	    // Parsing the date into proper format
 		LocalDate firstDate = LocalDate.parse(startDate);

@@ -50,7 +50,8 @@ class TestSummaryProjectionReport {
 
 		assertEquals(3, spr.getProjectionResults().size());
 
-		spr.displayProjectionResults();
+		spr.displayProjectionResults("2021-01-01", "2021-01-31", "2021-01-22");
+		
 		assertEquals(70 + "% of enrollment period has elapsed." + System.lineSeparator()
 						+ " Course Enrollment Projected Cap" + System.lineSeparator()
 						+ " CS120G 0          0         120" + System.lineSeparator()
@@ -72,13 +73,15 @@ class TestSummaryProjectionReport {
 		spr.addCourse(cp);
 		spr.addCourse(cpr);
 
-		spr.displayProjectionResults();
+		spr.displayProjectionResults("2021-01-01", "2021-01-31", "2021-01-22");
+		
 		assertEquals(70 + "% of enrollment period has elapsed." + System.lineSeparator()
 				+ " Course Enrollment Projected Cap" + System.lineSeparator()
 				+ " CS120G 0          0         120" + System.lineSeparator()
 				+ "*CS121G 50         130       110" + System.lineSeparator(),
 				outputStreamCaptor.toString());
 	}   
+	
 	// Test that percentage calculated is correct
 		@Test
 		void testPercentageCalculation() {
@@ -93,7 +96,6 @@ class TestSummaryProjectionReport {
 			assertEquals(48, test2);		
 			assertEquals(100, greaterThan100);		
 			assertEquals(0, lessThan100);		
-		
 	}
 		
 	@AfterEach
