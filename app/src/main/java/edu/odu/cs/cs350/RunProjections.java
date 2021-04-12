@@ -58,7 +58,6 @@ public class RunProjections {
 		}
 		
 		/*
-		//increment through every semester loaded
 		for (int i = 0; i < historicSems.size(); i++)
 		{
 			//increment through every enrollment snapshot in the at each semester
@@ -70,6 +69,18 @@ public class RunProjections {
 					prog.summaryReport.addCourse(new CourseProjection(historicSems.get(i).getName(), historicSems.get(i).EnrollmentSnapshots.get(i).getOVERALL_CAP()));
 			}
 		}
+		
+		for (int j = 0; i < currentSem.EnrollemntSnapshots.size(); j++)
+		{
+			//check to see that only lectures are added to the summary projection report
+			if (!(currentSem.get(i).EnrollmentSnapshots.get(j).getCOLL().split(".") == "LAB")
+				&& (currentSem.get(i).EnrollmentSnapshots.get(j).getCOLL().split(".") == "RECITATION"))
+				prog.summaryReport.addCourse(new CourseProjection(currentSem.get(i).getName(), currentSem.get(i).EnrollmentSnapshots.get(i).getOVERALL_CAP()));
+		}	
+		
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
+   		LocalDateTime now = LocalDateTime.now();  
+		prog.summaryReport.displayProjectionResults(currentSem.getPreRegDate(), currentSem.getAddDeadline(), dtf.format(now));
 		*/
 		
     	//Automate this later when the projections are actually being calculated.	
