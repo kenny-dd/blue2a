@@ -59,7 +59,7 @@ public class RunProjections {
 			{
 				//check to see that only lectures are added to the summary projection report
 				if (!(semesterList.get(i).EnrollmentSnapshots.get(j).getCOLL().split(".") == "LAB") 
-					&& (semesterList.get(i).EnrollmentSnapshots.get(j).getCOLL()split(".") == "RECITATION"))
+					&& (semesterList.get(i).EnrollmentSnapshots.get(j).getCOLL().split(".") == "RECITATION"))
 					prog.summaryReport.addCourse(new CourseProjection(semesterList.get(i).getName(), semesterList.get(i).EnrollmentSnapshots.get(i).getOVERALL_CAP()));
 			}
 		}
