@@ -12,8 +12,8 @@ build-job:
         - ./gradlew build
         - eval $(ssh-agent -t 5m -s)
         - ssh-add <(echo "$RSYNC_KEY")
-        - rsync -auvz -e "ssh -o StrictHostKeyChecking=no" app/build/reports/ jessary@linux.cs.odu.edu:/home/jessary/secure_html/Reports
-        #- rsync -auvz -e "ssh -o StrictHostKeyChecking=no" app/build/reports/ jessary@linux.cs.odu.edu:/home/jessary/secure_html/Reports
+        - rsync -auvz -e "ssh -o StrictHostKeyChecking=no" app/build/reports/tests/ jessary@linux.cs.odu.edu:/home/jessary/secure_html/Reports/tests/
+        - rsync -auvz -e "ssh -o StrictHostKeyChecking=no" app/build/docs/javadoc/ jessary@linux.cs.odu.edu:/home/jessary/secure_html/Reports/javadoc/
         - ssh-agent -k
 
     only:
