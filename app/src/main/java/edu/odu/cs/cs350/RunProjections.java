@@ -57,8 +57,7 @@ public class RunProjections {
 		}
 		*/
 		
-    	//Automate this later when the projections are actually being calculated.
-    	
+    	//Automate this later when the projections are actually being calculated.	
 		prog.summaryReport.addCourse(new CourseProjection("CS120G", 100));
 		prog.summaryReport.addCourse(new CourseProjection("CS170G", 75));
 		prog.summaryReport.addCourse(new CourseProjection("CS150", 130));
