@@ -58,18 +58,14 @@ test {
 
 
 
-tasks.named('jar') {
+jar {
     manifest {
         attributes(
                 'Main-Class': 'edu.odu.cs.cs350.RunProjections',
                 'Implementation-Title': project.name,
                 'Implementation-Version': project.version)
     }
-
-
-from { configurations.runtimeClasspath.collect {
-         it.isDirectory() ? it : zipTree(it) } }
-
-
-
+//    from { configurations.runtimeClasspath.collect {
+//         it.isDirectory() ? it : zipTree(it) }
+//    }
 }

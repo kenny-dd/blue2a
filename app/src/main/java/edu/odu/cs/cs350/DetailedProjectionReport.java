@@ -89,9 +89,9 @@ public class DetailedProjectionReport {
 		fileout = new FileOutputStream(filePath+"/report.xlsx");
 		int c;
 		
-		while((c=file.read()) != -1){
-			fileout.write(c);
-		}
+//		while((c=file.read()) != -1){
+//			fileout.write(c);
+//		}
 	
 	
 	
