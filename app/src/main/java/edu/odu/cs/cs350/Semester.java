@@ -224,14 +224,10 @@ public class Semester {
         csvReader.close();
         return list;
     }
-    public List<EnrollmentSnapshot> readCsvByLine() throws Exception {
-        Reader reader = Files.newBufferedReader(Paths.get(
-                ClassLoader.getSystemResource("2020-10-05.csv").toURI()));
+    public List<EnrollmentSnapshot> readCsvByLine(String filename) throws Exception {
+        Reader reader = Files.newBufferedReader(Paths.get(filename));
         List<EnrollmentSnapshot> snaps = new ArrayList<>();
         List<String[]> arr = readCsv(reader);
-        for(String s : arr.get(1)) {
-            System.out.println(s);
-        }
         for(int i = 1; i< arr.size(); i++) {
             EnrollmentSnapshot snap = new EnrollmentSnapshot();
 
@@ -241,7 +237,7 @@ public class Semester {
                 snap.setOVERALL_CAP(cap);
                 int enr = Integer.parseInt(arr.get(i)[23]);
                 snap.setENR(enr);
-                String title = arr.get(i)[4];
+                String title = arr.get(i)[3];
                 snap.setTITLE(title);
                 snaps.add(snap);
             }
@@ -251,7 +247,7 @@ public class Semester {
                 snap.setOVERALL_CAP(cap);
                 int enr = Integer.parseInt(arr.get(i)[24]);
                 snap.setENR(enr);
-                String title = arr.get(i)[4];
+                String title = arr.get(i)[3];
                 snap.setTITLE(title);
                 snaps.add(snap);
             }

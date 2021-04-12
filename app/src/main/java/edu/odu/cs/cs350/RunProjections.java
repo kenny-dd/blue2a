@@ -4,6 +4,7 @@
 package edu.odu.cs.cs350;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.MalformedURLException;
@@ -44,10 +45,12 @@ public class RunProjections {
 				//Does not throw error when invalid URL is passed yet
     		  	System.err.println("Invalid URL passed: " + args[i]);
     		}
+			historicSems.get(i).fetchFiles();
     	}
 
     	//Load the current semester
     	currentSem.setPath(args[args.length - 2]);
+    	List<File> semFiles = currentSem.fetchFiles();
 
 		RunProjections prog = new RunProjections();
 
@@ -56,6 +59,25 @@ public class RunProjections {
 		} catch (IOException e) {
 			//Do something
 		}
+
+		List<EnrollmentSnapshot> currentSnaps = currentSem.readCsvByLine(semFiles.get(semFiles.size()-1).toString());
+		String currentDate = semFiles.get(semFiles.size()-1).toString();
+		currentDate = currentDate.substring(0, currentDate.length()-4);
+
+		for (EnrollmentSnapshot e : currentSnaps) {
+			CourseProjection cp = new CourseProjection("CS"+e.getTITLE(), e.getOVERALL_CAP());
+			System.out.println(prog.summaryReport.enrollmentPeriod(currentSem.getPreRegDate(), currentSem.getAddDeadline(), currentDate)/100.0 + " " + e.getENR());
+			cp.addCurrentValue(prog.summaryReport.enrollmentPeriod(currentSem.getPreRegDate(), currentSem.getAddDeadline(), currentDate)/100.0, e.getENR());
+			prog.projections.add(cp);
+		}
+
+//		for (Semester s : historicSems) {
+//			List<File> files = s.fetchFiles();
+//			for (File f : files) {
+//				List<EnrollmentSnapshot> snaps = s.readCsvByLine(f.toString());
+//
+//			}
+//		}
 		
 		/*
 		for (int i = 0; i < historicSems.size(); i++)
@@ -76,7 +98,7 @@ public class RunProjections {
 			if (!(currentSem.get(i).EnrollmentSnapshots.get(j).getCOLL().split(".") == "LAB")
 				&& (currentSem.get(i).EnrollmentSnapshots.get(j).getCOLL().split(".") == "RECITATION"))
 				prog.summaryReport.addCourse(new CourseProjection(currentSem.get(i).getName(), currentSem.get(i).EnrollmentSnapshots.get(i).getOVERALL_CAP()));
-		}	
+		}
 		
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
    		LocalDateTime now = LocalDateTime.now();  
@@ -84,10 +106,11 @@ public class RunProjections {
 		*/
 		
     	//Automate this later when the projections are actually being calculated.	
-		prog.summaryReport.addCourse(new CourseProjection("CS120G", 100));
-		prog.summaryReport.addCourse(new CourseProjection("CS170G", 75));
-		prog.summaryReport.addCourse(new CourseProjection("CS150", 130));
-    	prog.summaryReport.displayProjectionResults(currentSem.getPreRegDate(), currentSem.getAddDeadline(), "2021-01-22");
+		for (CourseProjection cp : prog.projections) {
+			prog.summaryReport.addCourse(cp);
+		}
+
+    	prog.summaryReport.displayProjectionResults(currentSem.getPreRegDate(), currentSem.getAddDeadline(), currentDate);
         
     }
 }

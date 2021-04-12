@@ -10,6 +10,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'java'
+    id "com.github.johnrengelman.shadow" version "6.1.0"
 }
 
 repositories {
@@ -39,6 +40,8 @@ dependencies {
     
 }
 
+mainClassName = "edu.odu.cs.cs350.RunProjections"
+
 application {
     // Define the main class for the application.
     mainClass = 'edu.odu.cs.cs350.RunProjections'
@@ -58,15 +61,16 @@ test {
 }
 
 jar {
+
     manifest {
-        attributes(
-                'Main-Class': 'edu.odu.cs.cs350.RunProjections',
-                'Implementation-Title': project.name,
-                'Implementation-Version': project.version)
+        attributes 'Main-Class': 'edu.odu.cs.cs350.RunProjections'
     }
-//    from { configurations.runtimeClasspath.collect {
-//         it.isDirectory() ? it : zipTree(it) }
-//    }
+}
+
+shadowJar {
+    manifest {
+        inheritFrom project.tasks.jar.manifest
+    }
 }
 
 javadoc {                  
