@@ -122,7 +122,7 @@ public class CourseProjection {
             return (int)Math.ceil(historicValues.get(index) / (double)hCounts.get(index));
         }
 
-        return -1;
+        return interpolate(historicValues, index);
     }
 
     /**
@@ -175,13 +175,14 @@ public class CourseProjection {
      */
     public void makeProjection(double dateNum) {
         double recentIndex = getMaxMapIndex(currentValues);
+        int recentHistoric = interpolate(historicValues, recentIndex);
+        int dateHistoric = interpolate(historicValues, dateNum);
+
         if (dateNum <= recentIndex) {
             return;
         }
 
-        //Add interpolation for historical values here.
-
-        projections.put(dateNum, (int)Math.ceil((double)currentValues.get(recentIndex) / historicValues.get(recentIndex) * historicValues.get(dateNum)));
+        projections.put(dateNum, (int)Math.ceil((double)currentValues.get(recentIndex) / recentHistoric * dateHistoric));
     }
 
     private Double getMaxMapIndex(HashMap map) {
@@ -193,6 +194,34 @@ public class CourseProjection {
         }
 
         return max;
+    }
+
+    private int interpolate(HashMap map, double index) {
+        if (map.containsKey(index)) {
+            return (int)map.get(index);
+        }
+
+        double prevIndex = -1.0;
+        double nextIndex = -1.0;
+        int prevVal;
+        int nextVal;
+        int calculatedVal;
+
+        for (Object ind : map.keySet()) {
+            if ((Double)ind < index){
+                prevIndex = (Double)ind;
+            }
+            else {
+                nextIndex = (Double)ind;
+            }
+        }
+
+        prevVal = (int)map.get(prevIndex);
+        nextVal = (int)map.get(nextIndex);
+
+        calculatedVal = (int) Math.ceil(prevVal + ((index - prevIndex)/(nextIndex - prevIndex))*(nextVal - prevVal));
+
+        return calculatedVal;
     }
 
     //Data members

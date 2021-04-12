@@ -140,4 +140,28 @@ class TestCourseProjection {
         assertEquals("CS120G", cp.getName());
         assertEquals("*CS120G 50         130       120", cp.toString());
     }
+
+    //Test a projection in which interpolation is used
+    @Test
+    void testMakeProjectionInterpolation() {
+        CourseProjection cp = new CourseProjection("CS120G", 120);
+
+        cp.addCurrentValue(0.5, 50);
+        cp.addHistoricValue(0.3, 25);
+        cp.addHistoricValue(1.0, 104);
+
+        cp.makeProjection();
+
+        assertEquals(50, cp.getEnrollmentCount());
+        assertEquals(109, cp.getProjectionCount());
+        assertEquals(120, cp.getCourseCap());
+        assertEquals(50, cp.getCurrentValue(0.5));
+        assertEquals(1, cp.getCurrentValues().size());
+        assertEquals(25, cp.getHistoricValue(0.3));
+        assertEquals(104, cp.getHistoricValue(1.0));
+        assertEquals(48, cp.getHistoricValue(0.5));
+        assertEquals(2, cp.getHistoricValuesList().size());
+        assertEquals("CS120G", cp.getName());
+        assertEquals(" CS120G 50         109       120", cp.toString());
+    }
 }
