@@ -53,6 +53,11 @@ test {
     }
 }
 
+
+
+
+
+
 tasks.named('jar') {
     manifest {
         attributes(
@@ -60,4 +65,11 @@ tasks.named('jar') {
                 'Implementation-Title': project.name,
                 'Implementation-Version': project.version)
     }
+
+
+from { configurations.runtimeClasspath.collect {
+         it.isDirectory() ? it : zipTree(it) } }
+
+
+
 }
