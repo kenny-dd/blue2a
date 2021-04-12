@@ -2,6 +2,7 @@ stages:
     - build
 
 build-job:
+
     tags:
         - blue2a-runner
         
@@ -19,6 +20,7 @@ build-job:
     only:
         - master
     artifacts:
+    
         paths:
             - README.md
             - app/build/libs/app.jar
