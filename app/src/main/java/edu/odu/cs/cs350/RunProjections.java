@@ -49,10 +49,17 @@ public class RunProjections {
 		} catch (IOException e) {
 			//Do something
 		}
-
+		
+		/*
+		for (int i = 0; i < semesterList.size(); i++)
+		{
+			prog.summaryReport.addCourse(new CourseProjection(semesterList.get(i).getName(), semesterList.get(i).EnrollmentSnapshots.get(i).getOVERALL_CAP()));
+		}
+		*/
+		
     	//Automate this later when the projections are actually being calculated.
-    	prog.summaryReport.addCourse(new CourseProjection("CS120G", 120));
-		prog.summaryReport.addCourse(new CourseProjection("CS121G", 100));
+    	
+		prog.summaryReport.addCourse(new CourseProjection("CS120G", 100));
 		prog.summaryReport.addCourse(new CourseProjection("CS170G", 75));
 		prog.summaryReport.addCourse(new CourseProjection("CS150", 130));
     	prog.summaryReport.displayProjectionResults();
