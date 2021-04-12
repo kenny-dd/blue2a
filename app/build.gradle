@@ -10,11 +10,13 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'java'
+    id 'javadoc'
 }
 
 repositories {
     // Use JCenter for resolving dependencies.
     jcenter()
+    
 }
 
 dependencies {
@@ -35,6 +37,10 @@ dependencies {
 
     // This dependency is used for parsing web pages given by a link
     implementation 'org.jsoup:jsoup:1.13.1'
+    
+    // This dependency is used for Javadoc generation
+    testImplementation("junit:junit:4.12")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.5.2")
 }
 
 application {
@@ -43,6 +49,8 @@ application {
 }
 
 test {
+    useJUnit()
+
     // Use junit platform for unit tests.
     useJUnitPlatform()
     
@@ -52,11 +60,6 @@ test {
         events "passed", "skipped", "failed", "standardOut", "standardError"
     }
 }
-
-
-
-
-
 
 jar {
     manifest {
@@ -68,25 +71,6 @@ jar {
 //    from { configurations.runtimeClasspath.collect {
 //         it.isDirectory() ? it : zipTree(it) }
 //    }
-}
-
-plugins {
-   id 'java'
-   id 'javadoc'    
-}
-
-repositories {
-    jcenter()
-}
-
-dependencies {
-    testImplementation("junit:junit:4.12")
-    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.5.2")
-}
-
-test {
-    useJUnit()
-    ignoreFailures = true
 }
 
 javadoc {                  
