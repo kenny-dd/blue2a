@@ -53,6 +53,9 @@ public class RunProjections {
 		/*
 		for (int i = 0; i < semesterList.size(); i++)
 		{
+			//check to see that only lectures are added
+			if (!(semesterList.get(i).EnrollmentSnapshots.get(i).getCOLL() == "LAB") 
+				&& (semesterList.get(i).EnrollmentSnapshots.get(i).getCOLL() == "RECITATION"))
 			prog.summaryReport.addCourse(new CourseProjection(semesterList.get(i).getName(), semesterList.get(i).EnrollmentSnapshots.get(i).getOVERALL_CAP()));
 		}
 		*/
