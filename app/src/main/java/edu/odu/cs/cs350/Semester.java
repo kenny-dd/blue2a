@@ -7,21 +7,20 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import com.opencsv.bean.CsvToBeanBuilder;
 
 public class Semester {
     // Default Constructor
@@ -137,39 +136,57 @@ public class Semester {
 
             System.out.println("Number of files in URL: " + files.size());
             System.out.println("Fetching files from " + this.url + "...");
-            for(Element file: files) {
 
-                if (file.text().endsWith(".csv")) {
-                    File csvFile;
-                    FileUtils.copyURLToFile(new URL(file.attr("abs:href")), csvFile =  new File(file.text()));
-                    this.csvFiles.add(csvFile);
-                }
+            // We need to find the dates file first to set the pre registration and add deadline dates,
+            // so we can grab the relevant enrollment snapshots only
+            for(Element file : files) {
                 if (file.text().endsWith("dates.txt")) {
                     File datesFile;
                     FileUtils.copyURLToFile(new URL(file.attr("abs:href")), datesFile =  new File(file.text()));
                     this.dates = datesFile;
+                    setDates(this.dates);
+                }
+            }
+            // Grab relevant enrollment snapshots
+            boolean end = true;
+            for(Element file: files) {
+                // Start grabbing snapshots when we see pre registration date
+                if (file.text().endsWith(this.preRegDate + ".csv")) {
+                    end = false;
+                }
+                if(!end) {
+                    File csvFile;
+                    FileUtils.copyURLToFile(new URL(file.attr("abs:href")), csvFile =  new File(file.text()));
+                    this.csvFiles.add(csvFile);
+                    //List<EnrollmentSnapshot> snapshots = new CsvToBeanBuilder<EnrollmentSnapshot>(new FileReader(csvFile))
+                    //        .withType(EnrollmentSnapshot.class).build().parse();
+
+                    //System.out.println(snapshots.get(0).getCRN());
+                }
+                // Stop grabbing snapshots after we see add deadline
+                if (file.text().endsWith(this.addDeadline + ".csv")) {
+                    break;
                 }
             }
             System.out.println("Done.");
         }
         else {
-
+            //@TODO: Still need to implement snapshot filtering for regular directories.
             System.out.println("Fetching files from " + this.pathToSemesterDir + "...");
             try(Stream<Path> pathToFiles = Files.walk(this.pathToSemesterDir)) {
-
                 pathToFiles.forEach(filePath -> {
                     String[] tokens = filePath.toString().split("[\\\\|/]");
                     String filename;
-                    if(filePath.toString().endsWith(".csv")) {
-
+                    if (filePath.toString().endsWith(".csv")) {
                         filename = tokens[tokens.length - 1];
                         File tmpCsvFile = new File(filename);
                         this.csvFiles.add(tmpCsvFile);
                     }
-                    else if(filePath.toString().endsWith("dates.txt")) {
+                     if(filePath.toString().endsWith("dates.txt")) {
 
                         filename = tokens[tokens.length - 1];
                         this.dates = new File(filename);
+                        setDates(this.dates);
                     }
                 });
                 System.out.println("Done.");
@@ -186,6 +203,60 @@ public class Semester {
      */
     public void retrieveEnrollmentSnapshots() {
         
+    }
+    public List<String[]> readCsv(Reader reader) throws Exception {
+        CSVParser parser = new CSVParserBuilder()
+                .withSeparator(',')
+                .withEscapeChar('\\')
+                .withQuoteChar('\"')
+                .withIgnoreQuotations(true)
+                .build();
+        List<String[]> list = new ArrayList<>();
+        CSVReader csvReader = new CSVReaderBuilder(reader)
+                .withSkipLines(0)
+                .withCSVParser(parser)
+                .build();
+        String[] line;
+        while ((line = csvReader.readNext()) != null) {
+            list.add(line);
+        }
+        reader.close();
+        csvReader.close();
+        return list;
+    }
+    public List<EnrollmentSnapshot> readCsvByLine() throws Exception {
+        Reader reader = Files.newBufferedReader(Paths.get(
+                ClassLoader.getSystemResource("2020-10-05.csv").toURI()));
+        List<EnrollmentSnapshot> snaps = new ArrayList<>();
+        List<String[]> arr = readCsv(reader);
+        for(String s : arr.get(1)) {
+            System.out.println(s);
+        }
+        for(int i = 1; i< arr.size(); i++) {
+            EnrollmentSnapshot snap = new EnrollmentSnapshot();
+
+            if(arr.get(i)[21].equals("")) {
+
+                int cap = (arr.get(i)[22].equals("")) ? 0 : Integer.parseInt(arr.get(i)[22]);
+                snap.setOVERALL_CAP(cap);
+                int enr = Integer.parseInt(arr.get(i)[23]);
+                snap.setENR(enr);
+                String title = arr.get(i)[4];
+                snap.setTITLE(title);
+                snaps.add(snap);
+            }
+            if(!(arr.get(i)[21].equals("")|| arr.get(i)[21].equals("IN"))) {
+
+                int cap = (arr.get(i)[23].equals("")) ? 0 : Integer.parseInt(arr.get(i)[23]);
+                snap.setOVERALL_CAP(cap);
+                int enr = Integer.parseInt(arr.get(i)[24]);
+                snap.setENR(enr);
+                String title = arr.get(i)[4];
+                snap.setTITLE(title);
+                snaps.add(snap);
+            }
+        }
+        return snaps;
     }
     
     // Data members
