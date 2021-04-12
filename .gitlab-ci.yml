@@ -3,7 +3,7 @@ stages:
 
 build-job:
     tags:
-        - my-aws-shell
+        - blue2a-runner
     stage: build
     script:
         - chmod +x gradlew
