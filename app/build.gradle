@@ -69,3 +69,31 @@ jar {
 //         it.isDirectory() ? it : zipTree(it) }
 //    }
 }
+
+plugins {
+   id 'java'
+   id 'javadoc'    
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testImplementation("junit:junit:4.12")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.5.2")
+}
+
+test {
+    useJUnit()
+    ignoreFailures = true
+}
+
+javadoc {                  
+   options.with {
+     links 'https://docs.oracle.com/javase/8/docs/api/', 'gradle/javadocs/jdk'
+   }
+   failOnError = false;  
+}
+
+build.dependsOn javadoc
