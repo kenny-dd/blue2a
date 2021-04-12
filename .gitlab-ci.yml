@@ -1,0 +1,24 @@
+stages:
+    - build
+
+build-job:
+    tags:
+        - blue2a-runner
+        
+    stage: build
+    
+    script:
+        - chmod +x gradlew
+        - ./gradlew build
+        - eval $(ssh-agent -t 5m -s)
+        - ssh-add <(echo "$RSYNC_KEY")
+        - rsync -auvz -e "ssh -o StrictHostKeyChecking=no" app/build/reports/ jessary@linux.cs.odu.edu:/home/jessary/secure_html/Reports
+        - ssh-agent -k
+
+    only:
+        - master
+    artifacts:
+        paths:
+            - README.md
+            - app/build/libs/app.jar
+

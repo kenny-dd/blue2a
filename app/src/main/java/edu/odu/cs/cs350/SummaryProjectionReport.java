@@ -39,6 +39,7 @@ public class SummaryProjectionReport{
 			System.out.println(ProjectionResults.get(i));
 		}
 	}
+	
 	// Data Member
 	private List<CourseProjection> ProjectionResults;
 	

@@ -23,12 +23,14 @@ public class RunProjections {
     	
     	List<Semester> semesterList = new ArrayList<>();
     	
+    	//check to see if enough parameters were provided
     	if(args.length < 2)
     	{
     		System.err.println("Not enough parameters passed to program.");
     		System.exit(1);
     	}  
     	
+    	//for every input argument provided, add a new semester 
     	for (int i = 0; i < args.length - 1; i++)
     	{
     		semesterList.add(new Semester());
