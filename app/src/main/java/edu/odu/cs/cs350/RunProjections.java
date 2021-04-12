@@ -87,7 +87,7 @@ public class RunProjections {
 		prog.summaryReport.addCourse(new CourseProjection("CS120G", 100));
 		prog.summaryReport.addCourse(new CourseProjection("CS170G", 75));
 		prog.summaryReport.addCourse(new CourseProjection("CS150", 130));
-    	prog.summaryReport.displayProjectionResults("2021-01-01", "2021-01-31", "2021-01-22");
+    	prog.summaryReport.displayProjectionResults(currentSem.getPreRegDate(), currentSem.getAddDeadline(), "2021-01-22");
         
     }
 }
