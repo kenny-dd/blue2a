@@ -16,11 +16,18 @@ import java.nio.file.Paths;
 
 public class DetailedProjectionReport {
 	
+	
+	private InputStream file;
+	private FileOutputStream fileout;
+	
+	
 	//Default Constructor
 	public DetailedProjectionReport () {
 		
 		this.filePath="";
+		file = getClass().getResourceAsStream("template.xlsx");
 		
+	
 	}
 	//gets and sets output file path 
 	public String GetFilePath() {
@@ -59,7 +66,9 @@ public class DetailedProjectionReport {
 	//takes in output file path and creates an excel workbook based on version specified by CLI. 
 	public void outputviaCLI(String filePath) throws IOException
 	{
-		XSSFWorkbook workbook;
+		
+		output = new File(filePath+"/report.xlsx");
+		
 		
 		try {
 			File directory = new File(filePath);
@@ -67,33 +76,28 @@ public class DetailedProjectionReport {
 				directory.mkdir();
 			}
 
-			
-			workbook = new XSSFWorkbook(filePath + "/report");
-			//output = workbook;
 
 			if (output.createNewFile()) {
 				//File was created successfully
 			} else {
 				//File already exists overwrite it
 			}
-		} catch (IOException e) {
+			}catch (IOException e) {
 			System.err.println("Error occured when creating file " + filePath + "/report");
 		}
-
-		//Come back to this later
-	  	//XSSFWorkbook workbook;
-
-		//if (filePath.endsWith("xlsx")) {
-		    //workbook = new XSSFWorkbook(filePath);
-		//} else if (filePath.endsWith("xls")) {
-		   // workbook = new HSSFWorkbook();
-	//}// else {
-		//throw new IllegalArgumentException("The specified file is not Excel file");
-	//}
-
-	   //return workbook;
+	
+		fileout = new FileOutputStream(filePath+"/report.xlsx");
+		int c;
 		
+		while((c=file.read()) != -1){
+			fileout.write(c);
+		}
+	
+	
+	
 	}
+
+	
 	
 	private String filePath;
 	private String newFilePath;
