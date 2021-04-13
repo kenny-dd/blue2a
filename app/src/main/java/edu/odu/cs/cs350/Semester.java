@@ -29,14 +29,12 @@ public class Semester {
         this.name = "";
         this.preRegDate = "";
         this.addDeadline = "";
-        this.EnrollmentSnapshots = new ArrayList<ArrayList<EnrollmentSnapshot>>();
     }
     public Semester(String semesterPath, String preRegDate, String addDeadline) throws Throwable {
         this.isURL = false;
         setName(semesterPath);
         this.preRegDate = preRegDate;
         this.addDeadline = addDeadline;
-        this.EnrollmentSnapshots = new ArrayList<ArrayList<EnrollmentSnapshot>>();
         setPath(semesterPath);
     }
   	public URL getURL() {
@@ -76,6 +74,10 @@ public class Semester {
     /**
      * Sets path for semester class. 
      * Can take a URL or system path.
+     *
+     * @param semesterDirPath
+     * @throws Throwable
+     * @return this.isURL
      */
     public boolean setPath(String semesterDirPath) throws Throwable {
         String s = semesterDirPath.trim().toLowerCase();
@@ -126,6 +128,9 @@ public class Semester {
      * Each csv file is put into the csvFiles list.
      * If the file doesnt exist, or any other issue is encountered,
      * an IOException is thrown.
+     *
+     * @return this.csvFiles :list of fetched csv files
+     * @throws IOException
      */
     public List<File> fetchFiles() throws IOException { 
         this.csvFiles = new ArrayList<File>();
@@ -158,10 +163,6 @@ public class Semester {
                     File csvFile;
                     FileUtils.copyURLToFile(new URL(file.attr("abs:href")), csvFile =  new File(file.text()));
                     this.csvFiles.add(csvFile);
-                    //List<EnrollmentSnapshot> snapshots = new CsvToBeanBuilder<EnrollmentSnapshot>(new FileReader(csvFile))
-                    //        .withType(EnrollmentSnapshot.class).build().parse();
-
-                    //System.out.println(snapshots.get(0).getCRN());
                 }
                 // Stop grabbing snapshots after we see add deadline
                 if (file.text().endsWith(this.addDeadline + ".csv")) {
@@ -196,14 +197,15 @@ public class Semester {
     }
 
     /**
-     * Fill EnrollmentSnapshots collection
-     * with all enrollment snapshot files from
-     * the semester directory. The files must
-     * be within the pre registration date and add deadline.
+     * Read a csv file, storing each field in the line into an
+     * element in a string array. The array representing the csv line
+     * is then added to a list.
+     *
+     * @param reader :the reader for the csv file
+     * @return list :list of string arrays; each element in the list
+     *               represents a line in the csv file.
+     * @throws Exception
      */
-    public void retrieveEnrollmentSnapshots() {
-        
-    }
     public List<String[]> readCsv(Reader reader) throws Exception {
         CSVParser parser = new CSVParserBuilder()
                 .withSeparator(',')
@@ -224,6 +226,20 @@ public class Semester {
         csvReader.close();
         return list;
     }
+
+    /**
+     * Reads each line in the csv file,
+     * then creates a new Enrollment snapshot class.
+     * Then the Enrollment snapshot's overall cap,
+     * overall enrollment, and title are assigned
+     * using the data read from the csv file.
+     *
+     * @param filename :the csv file
+     * @return snaps :the list of enrollment snapshots,
+     *                with each snapshot having their data
+     *                obtained from the csv file supplied by filename
+     * @throws Exception
+     */
     public List<EnrollmentSnapshot> readCsvByLine(String filename) throws Exception {
         Reader reader = Files.newBufferedReader(Paths.get(filename));
         List<EnrollmentSnapshot> snaps = new ArrayList<>();
@@ -258,12 +274,10 @@ public class Semester {
     // Data members
     private boolean isURL;
     private String name;
-    private String semesterPath;
     private String preRegDate;
     private String addDeadline;
     private URL url;
     private Path pathToSemesterDir;
     private File dates;
     private List<File> csvFiles;
-    protected List<ArrayList<EnrollmentSnapshot>> EnrollmentSnapshots;
 }
