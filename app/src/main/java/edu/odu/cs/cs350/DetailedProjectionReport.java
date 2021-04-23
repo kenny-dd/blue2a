@@ -10,6 +10,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -25,7 +28,7 @@ public class DetailedProjectionReport {
 	public DetailedProjectionReport () {
 		
 		this.filePath="";
-		file = getClass().getResourceAsStream("template.xlsx");
+		//file = getClass().getResourceAsStream("/src/template.xlsx");
 		
 	
 	}
@@ -64,10 +67,26 @@ public class DetailedProjectionReport {
 	}
 	
 	//takes in output file path and creates an excel workbook based on version specified by CLI. 
-	public void outputviaCLI(String filePath) throws IOException
+	public void outputviaCLI(String filePath) throws IOException, InvalidFormatException
 	{
 		
-		output = new File(filePath+"/report.xlsx");
+		XSSFWorkbook wb =new XSSFWorkbook(OPCPackage.open("/app/template.xlsx"));
+		XSSFSheet sheet = wb.getSheetAt(0);
+		
+		sheet.getRow(2).getCell(0).setCellValue("changed value");
+		
+		FileOutputStream fileout =new FileOutputStream(filePath+"/new.xlsx");
+		wb.write(fileout);
+		fileout.close();
+		
+		
+		
+		
+		
+		
+		
+		
+		//output = new File(filePath+"/report.xlsx");
 		
 		
 		try {
@@ -86,8 +105,8 @@ public class DetailedProjectionReport {
 			System.err.println("Error occured when creating file " + filePath + "/report");
 		}
 	
-		fileout = new FileOutputStream(filePath+"/report.xlsx");
-		int c;
+		//fileout = new FileOutputStream(filePath+"/report.xlsx");
+		//int c;
 		
 //		while((c=file.read()) != -1){
 //			fileout.write(c);
