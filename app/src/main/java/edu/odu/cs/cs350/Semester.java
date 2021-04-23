@@ -159,7 +159,7 @@ public class Semester {
                 if (file.text().endsWith(this.preRegDate + ".csv")) {
                     end = false;
                 }
-                if(!end) {
+                if(!end && !file.text().endsWith("dates.txt")) {
                     File csvFile;
                     FileUtils.copyURLToFile(new URL(file.attr("abs:href")), csvFile =  new File(file.text()));
                     this.csvFiles.add(csvFile);
