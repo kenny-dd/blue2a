@@ -7,10 +7,12 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.time.LocalDate;
 
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
@@ -154,10 +156,17 @@ public class Semester {
             }
             // Grab relevant enrollment snapshots
             boolean end = true;
+            LocalDate preReg = LocalDate.parse(this.getPreRegDate());
+            LocalDate endReg = LocalDate.parse(this.getAddDeadline());
             for(Element file: files) {
                 // Start grabbing snapshots when we see pre registration date
-                if (file.text().endsWith(this.preRegDate + ".csv")) {
-                    end = false;
+                String fileName = file.text();
+                LocalDate current = null;
+                if (fileName.endsWith(".csv")) {
+                    current = LocalDate.parse(fileName.substring(0, fileName.length() - 4));
+                    if (current.compareTo(preReg) >= 0) {
+                        end = false;
+                    }
                 }
                 if(!end && !file.text().endsWith("dates.txt")) {
                     File csvFile;
@@ -165,7 +174,7 @@ public class Semester {
                     this.csvFiles.add(csvFile);
                 }
                 // Stop grabbing snapshots after we see add deadline
-                if (file.text().endsWith(this.addDeadline + ".csv")) {
+                if (current != null && current.compareTo(endReg) >= 0) {
                     break;
                 }
             }
