@@ -15,6 +15,8 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DetailedProjectionReport {
@@ -26,8 +28,8 @@ public class DetailedProjectionReport {
 	
 	//Default Constructor
 	public DetailedProjectionReport () {
-		
 		this.filePath="";
+		projectionResults = new ArrayList<CourseProjection>();
 		//file = getClass().getResourceAsStream("/src/template.xlsx");
 		
 	
@@ -47,23 +49,24 @@ public class DetailedProjectionReport {
 	
 	
 	public void GenerateHistoricalGraph() {
-		
-		
-		
-		
+
 	}
 	
 	public void GenerateCurrentGraph() {
-		
-		
-		
+
 	}
 	
 	
 	public void GenerateProjectionGraph() {
-		
-		
-		
+
+	}
+
+	public void addProjection(CourseProjection proj) {
+		projectionResults.add(proj);
+	}
+
+	public List<CourseProjection> getProjections() {
+		return projectionResults;
 	}
 	
 	//takes in output file path and creates an excel workbook based on version specified by CLI. 
@@ -105,6 +108,7 @@ public class DetailedProjectionReport {
 	private String filePath;
 	private String newFilePath;
 	private File output;
+	private List<CourseProjection> projectionResults;
 	
 	
 }

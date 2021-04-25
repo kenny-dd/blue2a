@@ -8,64 +8,69 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.apache.xmlbeans.impl.soap.Detail;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 public class TestDetailedProjectionReport {
 
-    // TODO  Any data members that you want to share among different tests	
-	
- public DetailedProjectionReport DetailedProjectionReport1;
- public DetailedProjectionReport DetailedProjectionReport2;
-public String path;
-public Path RealPath;
-public String tempPath;	
-public String XLSX;	
-	
-  @BeforeEach
-  public void setUp() throws Exception {
-	  
-  DetailedProjectionReport1= new DetailedProjectionReport();
-  tempPath= "C:/users/OutputFiles";
-  XLSX="C:users/OutPutFiles/test.xlsx";
-  //path = Paths.get(tempPath);
-  
-  
-  }
+    // TODO  Any data members that you want to share among different tests
+    public DetailedProjectionReport DetailedProjectionReport1;
+    public DetailedProjectionReport DetailedProjectionReport2;
+    public String path;
+    public Path RealPath;
+    public String tempPath;
+    public String XLSX;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+
+        DetailedProjectionReport1= new DetailedProjectionReport();
+        tempPath= "C:/users/OutputFiles";
+        XLSX="C:users/OutPutFiles/test.xlsx";
+        //path = Paths.get(tempPath);
+    }
 
   
    @Test 
    public void TestDPRConstructor () {
-	 assertThat (DetailedProjectionReport1.GetFilePath(), is(""));
-	 
-   
+        assertThat (DetailedProjectionReport1.GetFilePath(), is(""));
+        assertThat(DetailedProjectionReport1.getProjections().size(), is(0));
    }
   
   
-  @Test
-  public void testSetFilePath() {
-	  assertThat(DetailedProjectionReport1.GetFilePath(), is(""));
-	  DetailedProjectionReport1.setPath(tempPath);
-	  assertThat(DetailedProjectionReport1.GetFilePath(), is("C:/users/OutputFiles"));
-  }
+    @Test
+    public void testSetFilePath() {
+        assertThat(DetailedProjectionReport1.GetFilePath(), is(""));
+        DetailedProjectionReport1.setPath(tempPath);
+        assertThat(DetailedProjectionReport1.GetFilePath(), is("C:/users/OutputFiles"));
+        assertThat(DetailedProjectionReport1.getProjections().size(), is(0));
+    }
 
-  @Test 
-  public void TestoutputViaCLI() throws IOException {
-	  DetailedProjectionReport1.setPath(path);
-      assertThat (DetailedProjectionReport1.GetFilePath().toString(), is(path));
-      RealPath=Paths.get(XLSX);
-      assertThat(DetailedProjectionReport1.GetFilePath(), is(Files.walk(this.RealPath)));
-	   
-  }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
- 
+    @Test
+    public void TestAddProjection() {
+        CourseProjection cp = new CourseProjection();
+        DetailedProjectionReport1.addProjection(cp);
+
+        assertThat(DetailedProjectionReport1.GetFilePath(), is(""));
+        assertThat(DetailedProjectionReport1.getProjections().size(), is(1));
+    }
+
+    @Test
+    public void TestoutputViaCLI() throws IOException {
+        try {
+            DetailedProjectionReport1.outputviaCLI("src/test/reports");
+        } catch (Exception e) {
+            assertEquals(0, 1, "Exception thrown: " + e.getMessage());
+        }
+
+        CourseProjection cp = new CourseProjection();
+        DetailedProjectionReport1.addProjection(cp);
+        File file = new File("src/test/reports/report.xlsx");
+
+        assertThat(DetailedProjectionReport1.GetFilePath(), is(""));
+        assertThat(DetailedProjectionReport1.getProjections().size(),is(1));
+        assertTrue(file.exists());
+
+    }
 }
