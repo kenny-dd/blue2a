@@ -69,25 +69,7 @@ public class DetailedProjectionReport {
 	//takes in output file path and creates an excel workbook based on version specified by CLI. 
 	public void outputviaCLI(String filePath) throws IOException, InvalidFormatException
 	{
-		
-		XSSFWorkbook wb =new XSSFWorkbook(OPCPackage.open("/app/template.xlsx"));
-		XSSFSheet sheet = wb.getSheetAt(0);
-		
-		sheet.getRow(2).getCell(0).setCellValue("changed value");
-		
-		FileOutputStream fileout =new FileOutputStream(filePath+"/new.xlsx");
-		wb.write(fileout);
-		fileout.close();
-		
-		
-		
-		
-		
-		
-		
-		
-		//output = new File(filePath+"/report.xlsx");
-		
+		InputStream templateStream = DetailedProjectionReport.class.getResourceAsStream("/template.xlsx");
 		
 		try {
 			File directory = new File(filePath);
@@ -95,25 +77,27 @@ public class DetailedProjectionReport {
 				directory.mkdir();
 			}
 
-
+			output = new File(filePath + "/report.xlsx");
 			if (output.createNewFile()) {
 				//File was created successfully
 			} else {
 				//File already exists overwrite it
 			}
 			}catch (IOException e) {
-			System.err.println("Error occured when creating file " + filePath + "/report");
+			System.err.println("Error occured when creating file " + filePath + "/report.xlsx");
 		}
-	
-		//fileout = new FileOutputStream(filePath+"/report.xlsx");
-		//int c;
-		
-//		while((c=file.read()) != -1){
-//			fileout.write(c);
-//		}
-	
-	
-	
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(output));
+		byte[] buffer = new byte[1024];
+		int lengthRead;
+		while ((lengthRead = templateStream.read(buffer)) > 0){
+			out.write(buffer, 0, lengthRead);
+			out.flush();
+		}
+		XSSFWorkbook wb =new XSSFWorkbook(OPCPackage.open(filePath + "/report.xlsx"));
+		XSSFSheet sheet = wb.getSheetAt(0);
+		sheet.getRow(2).getCell(0).setCellValue("changed value");
+		wb.write(out);
+		out.close();
 	}
 
 	

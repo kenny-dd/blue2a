@@ -127,11 +127,11 @@ public class RunProjections {
 			prog.summaryReport.addCourse(cp);
 		}
 
-//		try {
-//			prog.detailedReport.outputviaCLI(args[args.length-1]);
-//		} catch (IOException e) {
-//			//Do something
-//		}
+		try {
+			prog.detailedReport.outputviaCLI(args[args.length-1]);
+		} catch (IOException e) {
+			//Do something
+		}
 
     	prog.summaryReport.displayProjectionResults(currentSem.getPreRegDate(), currentSem.getAddDeadline(), currentDate);
 
