@@ -8,7 +8,7 @@ public class CourseProjection {
      */
     public CourseProjection() {
         this("", 0);
-    };
+    }
 
     /**
      * Create a course projection with a name and enrollment cap.
@@ -122,7 +122,7 @@ public class CourseProjection {
             return (int)Math.ceil(historicValues.get(index) / (double)hCounts.get(index));
         }
 
-        return interpolate(historicValues, index);
+        return interpolate(index);
     }
 
     /**
@@ -175,10 +175,15 @@ public class CourseProjection {
      */
     public void makeProjection(double dateNum) {
         double recentIndex = getMaxMapIndex(currentValues);
-        int recentHistoric = interpolate(historicValues, recentIndex);
-        int dateHistoric = interpolate(historicValues, dateNum);
+        int recentHistoric = interpolate(recentIndex);
+        int dateHistoric = interpolate(dateNum);
 
-        if (dateNum <= recentIndex) {
+        if (dateNum < recentIndex) {
+            return;
+        }
+
+        if (recentHistoric == 0 || dateHistoric == 0) {
+            projections.put(dateNum, currentValues.get(recentIndex));
             return;
         }
 
@@ -196,28 +201,42 @@ public class CourseProjection {
         return max;
     }
 
-    private int interpolate(HashMap map, double index) {
-        if (map.containsKey(index)) {
-            return (int)map.get(index);
+    private int interpolate(double index) {
+        //If there are no historic values for the course
+        if (historicValues.size() == 0) {
+            return 0;
         }
-
+        if (historicValues.containsKey(index)) {
+            return historicValues.get(index);
+        }
         double prevIndex = -1.0;
         double nextIndex = -1.0;
         int prevVal;
         int nextVal;
         int calculatedVal;
 
-        for (Object ind : map.keySet()) {
-            if ((Double)ind < index){
-                prevIndex = (Double)ind;
+        for (Double ind : historicValues.keySet()) {
+            if (ind < index){
+                prevIndex = ind;
             }
             else {
-                nextIndex = (Double)ind;
+                nextIndex = ind;
             }
         }
 
-        prevVal = (int)map.get(prevIndex);
-        nextVal = (int)map.get(nextIndex);
+        if (prevIndex == -1.0) {
+            prevVal = 0;
+        }
+        else {
+            prevVal = historicValues.get(prevIndex);
+        }
+
+        if (nextIndex == -1.0) {
+            nextVal = this.courseCap;
+        }
+        else {
+            nextVal = historicValues.get(nextIndex);
+        }
 
         calculatedVal = (int) Math.ceil(prevVal + ((index - prevIndex)/(nextIndex - prevIndex))*(nextVal - prevVal));
 
