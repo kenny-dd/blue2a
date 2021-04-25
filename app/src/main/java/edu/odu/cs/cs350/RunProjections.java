@@ -22,6 +22,15 @@ public class RunProjections {
     	detailedReport = new DetailedProjectionReport();
     	projections = new ArrayList<>();
 	}
+
+	private int FindCourseInList(String courseName) {
+    	for (int i = 0; i < projections.size(); i++) {
+    		if (projections.get(i).getName().equals(courseName)){
+    			return i;
+			}
+		}
+    	return -1;
+	}
      
     public static void main(String[] args) throws Throwable {
     	
@@ -45,7 +54,6 @@ public class RunProjections {
 				//Does not throw error when invalid URL is passed yet
     		  	System.err.println("Invalid URL passed: " + args[i]);
     		}
-			historicSems.get(i).fetchFiles();
     	}
 
     	//Load the current semester
@@ -54,30 +62,38 @@ public class RunProjections {
 
 		RunProjections prog = new RunProjections();
 
-		try {
-			prog.detailedReport.outputviaCLI(args[args.length-1]);
-		} catch (IOException e) {
-			//Do something
-		}
-
 		List<EnrollmentSnapshot> currentSnaps = currentSem.readCsvByLine(semFiles.get(semFiles.size()-1).toString());
 		String currentDate = semFiles.get(semFiles.size()-1).toString();
 		currentDate = currentDate.substring(0, currentDate.length()-4);
 
 		for (EnrollmentSnapshot e : currentSnaps) {
-			CourseProjection cp = new CourseProjection("CS"+e.getTITLE(), e.getOVERALL_CAP());
-			System.out.println(prog.summaryReport.enrollmentPeriod(currentSem.getPreRegDate(), currentSem.getAddDeadline(), currentDate)/100.0 + " " + e.getENR());
-			cp.addCurrentValue(prog.summaryReport.enrollmentPeriod(currentSem.getPreRegDate(), currentSem.getAddDeadline(), currentDate)/100.0, e.getENR());
-			prog.projections.add(cp);
+			int index = prog.FindCourseInList("CS"+e.getTITLE());
+			if (index == -1){
+				CourseProjection cp = new CourseProjection("CS"+e.getTITLE(), e.getOVERALL_CAP());
+				cp.addCurrentValue(prog.summaryReport.enrollmentPeriod(currentSem.getPreRegDate(), currentSem.getAddDeadline(), currentDate)/100.0, e.getENR());
+				prog.projections.add(cp);
+			}
+			else {
+				prog.projections.get(index).addCurrentValue(prog.summaryReport.enrollmentPeriod(currentSem.getPreRegDate(), currentSem.getAddDeadline(), currentDate)/100.0, e.getENR());
+			}
 		}
 
-//		for (Semester s : historicSems) {
-//			List<File> files = s.fetchFiles();
-//			for (File f : files) {
-//				List<EnrollmentSnapshot> snaps = s.readCsvByLine(f.toString());
-//
-//			}
-//		}
+		for (Semester s : historicSems) {
+			List<File> files = s.fetchFiles();
+			for (File f : files) {
+				List<EnrollmentSnapshot> snaps = s.readCsvByLine(f.toString());
+				String date = f.toString().substring(0, f.toString().length()-4);
+				for (EnrollmentSnapshot e : snaps) {
+
+					int index = prog.FindCourseInList("CS"+e.getTITLE());
+					if (index != -1) {
+						prog.projections.get(index).addHistoricValue(prog.summaryReport.enrollmentPeriod(s.getPreRegDate(), s.getAddDeadline(), date)/100.0, e.getENR());
+					}
+				}
+			}
+		}
+
+
 		
 		/*
 		for (int i = 0; i < historicSems.size(); i++)
@@ -107,10 +123,17 @@ public class RunProjections {
 		
     	//Automate this later when the projections are actually being calculated.	
 		for (CourseProjection cp : prog.projections) {
+			cp.makeProjection();
 			prog.summaryReport.addCourse(cp);
 		}
 
+//		try {
+//			prog.detailedReport.outputviaCLI(args[args.length-1]);
+//		} catch (IOException e) {
+//			//Do something
+//		}
+
     	prog.summaryReport.displayProjectionResults(currentSem.getPreRegDate(), currentSem.getAddDeadline(), currentDate);
-        
+
     }
 }
