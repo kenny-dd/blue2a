@@ -83,6 +83,8 @@ javadoc {
    failOnError = false;  
 }
 
+//run report accumulator
 reportsStats.reportsURL = 'https://wwww.odu.cs.edu/~jessary/Reports/'
 deployReports.deployDestination = 'app/build/reports/'
+
 build.dependsOn javadoc

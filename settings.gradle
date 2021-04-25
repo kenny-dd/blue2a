@@ -9,3 +9,16 @@
 
 rootProject.name = 'EnrollmentProjections'
 include('app')
+
+pluginManagement {
+    repositories {
+        jcenter()
+        maven {
+            url "https://plugins.gradle.ord/m2/"
+        }
+        ivy {
+            url 'https://www.cs.odu.edu/~ziel/ivyrepo'
+        }
+    }
+}
+
