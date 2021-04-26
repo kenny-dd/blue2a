@@ -125,6 +125,7 @@ public class RunProjections {
 		for (CourseProjection cp : prog.projections) {
 			cp.makeProjection();
 			prog.summaryReport.addCourse(cp);
+			prog.detailedReport.addProjection(cp);
 		}
 
 		try {

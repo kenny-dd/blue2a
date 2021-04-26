@@ -44,12 +44,19 @@ public class DetailedProjectionReport {
 		this.filePath=newFilePath;
 	
 	}
-	
-	
-	
-	
-	public void GenerateHistoricalGraph() {
 
+	public void GenerateHistoricalGraph(XSSFSheet sheet) {
+		
+		CourseProjection cp = projectionResults.get(0);		
+		int index = 1;
+		for (Double ind : cp.getHistoricValuesList().keySet()) {
+			Row row = sheet.createRow(index);
+			row.createCell(0);
+			row.createCell(1);
+			sheet.getRow(index).getCell(0).setCellValue(ind);
+			sheet.getRow(index).getCell(1).setCellValue(cp.getHistoricValue(ind));
+			index++;
+		}
 	}
 	
 	public void GenerateCurrentGraph() {
@@ -98,7 +105,7 @@ public class DetailedProjectionReport {
 		}
 		XSSFWorkbook wb =new XSSFWorkbook(OPCPackage.open(filePath + "/report.xlsx"));
 		XSSFSheet sheet = wb.getSheetAt(0);
-		sheet.getRow(2).getCell(0).setCellValue("changed value");
+		GenerateHistoricalGraph(sheet);
 		wb.write(out);
 		out.close();
 	}

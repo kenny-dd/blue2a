@@ -73,4 +73,11 @@ public class TestDetailedProjectionReport {
         assertTrue(file.exists());
 
     }
+    
+    @Test 
+    public void TestGenerateHistoricalGraph() {
+    	
+    	
+    	assertThat(DetailedProjectionReport1.getProjections().size(), is(1));
+    }
 }
