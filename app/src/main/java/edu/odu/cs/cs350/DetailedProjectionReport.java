@@ -59,15 +59,38 @@ public class DetailedProjectionReport {
 		}
 	}
 	
-	public void GenerateCurrentGraph() {
+	public void GenerateCurrentGraph(XSSFSheet sheet) {
 
+		CourseProjection cp = projectionResults.get(0);
+
+		int index = 1;
+		for(Double ind : cp.getCurrentValues().keySet()) {
+			Row row = sheet.getRow(index);
+			row.createCell(2);
+			row.createCell(3);
+			sheet.getRow(index).getCell(2).setCellValue(ind);
+			sheet.getRow(index).getCell(3).setCellValue(cp.getCurrentValue(ind));
+			index++;
+		
+		}
 	}
-	
-	
-	public void GenerateProjectionGraph() {
 
+	public void GenerateProjectionGraph(XSSFSheet sheet) {
+		
+		CourseProjection cp = projectionResults.get(0);
+
+		int index = 1;
+		for(Double ind : cp.getProjections().keySet()) {
+			Row row = sheet.getRow(index);
+			row.createCell(4);
+			row.createCell(5);
+			sheet.getRow(index).getCell(4).setCellValue(ind);
+			sheet.getRow(index).getCell(5).setCellValue(cp.getProjectionCount(ind));
+			index++;
+		
+		}
 	}
-
+          
 	public void addProjection(CourseProjection proj) {
 		projectionResults.add(proj);
 	}
@@ -81,11 +104,31 @@ public class DetailedProjectionReport {
 	{
 		InputStream templateStream = DetailedProjectionReport.class.getResourceAsStream("/template.xlsx");
 
+		try {
+            File directory = new File(filePath);
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+
+            output = new File(filePath + "/report.xlsx");
+            if (output.createNewFile()) {
+                //File was created successfully
+            } else {
+                //File already exists overwrite it
+            }
+            }catch (IOException e) {
+            System.err.println("Error occured when creating file " + filePath + "/report.xlsx");
+        }
+		
 		OutputStream fileout = new FileOutputStream(filePath + "/report.xlsx");
 
 		XSSFWorkbook wb =new XSSFWorkbook(templateStream);
 		XSSFSheet sheet = wb.getSheetAt(0);
+		
 		GenerateHistoricalGraph(sheet);
+		GenerateCurrentGraph(sheet);
+		GenerateProjectionGraph(sheet);
+		
 		wb.write(fileout);
 		fileout.close();
 	}

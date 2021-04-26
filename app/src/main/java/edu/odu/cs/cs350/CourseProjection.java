@@ -63,6 +63,10 @@ public class CourseProjection {
     public int getProjectionCount() {
         return getProjectionCount(getMaxMapIndex(projections));
     }
+    
+    public HashMap<Double, Integer> getProjections(){
+    	return projections;
+    }
 
     public int getProjectionCount(Double index) {
         if (projections.size() == 0) {
