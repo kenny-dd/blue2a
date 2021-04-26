@@ -6,8 +6,10 @@ import java.io.Console;
 import java.io.IOException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xddf.usermodel.chart.*;
+import org.apache.poi.xssf.usermodel.*;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -45,7 +47,7 @@ public class DetailedProjectionReport {
 	
 	}
 
-	public void GenerateHistoricalGraph(XSSFSheet sheet, CourseProjection cp) {
+	public void LoadHistoricValues(XSSFSheet sheet, CourseProjection cp) {
 		int index = 1;
 		for (Double ind : cp.getHistoricValuesList().keySet()) {
 			Row row = sheet.createRow(index);
@@ -57,7 +59,7 @@ public class DetailedProjectionReport {
 		}
 	}
 	
-	public void GenerateCurrentGraph(XSSFSheet sheet, CourseProjection cp) {
+	public void LoadCurrentValues(XSSFSheet sheet, CourseProjection cp) {
 
 		int index = 1;
 		for(Double ind : cp.getCurrentValues().keySet()) {
@@ -71,7 +73,7 @@ public class DetailedProjectionReport {
 		}
 	}
 
-	public void GenerateProjectionGraph(XSSFSheet sheet, CourseProjection cp) {
+	public void LoadProjectedValues(XSSFSheet sheet, CourseProjection cp) {
 		int index = 1;
 		for(Double ind : cp.getProjections().keySet()) {
 			Row row = sheet.getRow(index);
@@ -136,9 +138,9 @@ public class DetailedProjectionReport {
 		XSSFWorkbook wb =new XSSFWorkbook(templateStream);
 		for (CourseProjection cp : projectionResults) {
 			XSSFSheet sheet = wb.cloneSheet(0, cp.getName());
-			GenerateHistoricalGraph(sheet, cp);
-			GenerateCurrentGraph(sheet, cp);
-			GenerateProjectionGraph(sheet, cp);
+			LoadHistoricValues(sheet, cp);
+			LoadCurrentValues(sheet, cp);
+			LoadProjectedValues(sheet, cp);
 		}
 		wb.removeSheetAt(0);
 		wb.write(fileout);

@@ -67,6 +67,7 @@ public class TestDetailedProjectionReport {
         CourseProjection cp = new CourseProjection("CS120G", 120);
         cp.addCurrentValue(0.5, 50);
         cp.addHistoricValue(0.5, 40);
+        cp.addHistoricValue(1.0, 100);
         cp.makeProjection();
         DetailedProjectionReport1.addProjection(cp);
 
@@ -92,6 +93,7 @@ public class TestDetailedProjectionReport {
         CourseProjection cp = new CourseProjection("CS120G", 120);
         cp.addCurrentValue(0.5, 50);
         cp.addHistoricValue(0.5, 40);
+        cp.addHistoricValue(1.0, 100);
         cp.makeProjection();
 		
         DetailedProjectionReport1.addProjection(cp);
