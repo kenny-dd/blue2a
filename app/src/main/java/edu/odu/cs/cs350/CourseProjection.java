@@ -61,11 +61,15 @@ public class CourseProjection {
      * @return
      */
     public int getProjectionCount() {
+        return getProjectionCount(getMaxMapIndex(projections));
+    }
+
+    public int getProjectionCount(Double index) {
         if (projections.size() == 0) {
             return 0;
         }
 
-        return projections.get(getMaxMapIndex(projections));
+        return projections.get(index);
     }
 
     /**
