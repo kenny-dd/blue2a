@@ -186,11 +186,13 @@ public class CourseProjection {
         int recentHistoric = interpolate(recentIndex);
         int dateHistoric = interpolate(dateNum);
 
-        if (dateNum < recentIndex) {
+        if (currentValues.containsKey(dateNum)) {
+            projections.put(dateNum, currentValues.get(dateNum));
             return;
         }
 
-        if (recentHistoric == 0 || dateHistoric == 0) {
+
+        if (dateNum < recentIndex || recentHistoric == 0 || dateHistoric == 0) {
             projections.put(dateNum, currentValues.get(recentIndex));
             return;
         }
@@ -215,7 +217,7 @@ public class CourseProjection {
             return 0;
         }
         if (historicValues.containsKey(index)) {
-            return historicValues.get(index);
+            return getHistoricValue(index);
         }
         double prevIndex = -1.0;
         double nextIndex = -1.0;
@@ -236,14 +238,14 @@ public class CourseProjection {
             prevVal = 0;
         }
         else {
-            prevVal = historicValues.get(prevIndex);
+            prevVal = getHistoricValue(prevIndex);
         }
 
         if (nextIndex == -1.0) {
             nextVal = this.courseCap;
         }
         else {
-            nextVal = historicValues.get(nextIndex);
+            nextVal = getHistoricValue(nextIndex);
         }
 
         calculatedVal = (int) Math.ceil(prevVal + ((index - prevIndex)/(nextIndex - prevIndex))*(nextVal - prevVal));

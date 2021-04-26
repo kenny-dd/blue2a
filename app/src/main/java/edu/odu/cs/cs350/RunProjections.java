@@ -57,28 +57,28 @@ public class RunProjections {
     	}
 
     	//Load the current semester
+	    String currentDate = new String("");
     	currentSem.setPath(args[args.length - 2]);
     	List<File> semFiles = currentSem.fetchFiles();
 
 		RunProjections prog = new RunProjections();
 
-		List<EnrollmentSnapshot> currentSnaps = currentSem.readCsvByLine(semFiles.get(semFiles.size()-1).toString());
-		String currentDate = semFiles.get(semFiles.size()-1).toString();
-		currentDate = currentDate.substring(0, currentDate.length()-4);
+		for (File f : semFiles){
+			List<EnrollmentSnapshot> currentSnaps = currentSem.readCsvByLine(f.toString());
+			currentDate = f.toString();
+			currentDate = currentDate.substring(0, currentDate.length()-4);
 
-		for (EnrollmentSnapshot e : currentSnaps) {
-			int index = prog.FindCourseInList("CS"+e.getTITLE());
-			if (index == -1){
-				CourseProjection cp = new CourseProjection("CS"+e.getTITLE(), e.getOVERALL_CAP());
-				cp.addCurrentValue(prog.summaryReport.enrollmentPeriod(currentSem.getPreRegDate(), currentSem.getAddDeadline(), currentDate)/100.0, e.getENR());
-				prog.projections.add(cp);
+			for (EnrollmentSnapshot e : currentSnaps) {
+				int index = prog.FindCourseInList("CS"+e.getTITLE());
+				if (index == -1){
+					CourseProjection cp = new CourseProjection("CS"+e.getTITLE(), e.getOVERALL_CAP());
+					cp.addCurrentValue(prog.summaryReport.enrollmentPeriod(currentSem.getPreRegDate(), currentSem.getAddDeadline(), currentDate)/100.0, e.getENR());
+					prog.projections.add(cp);
+				}
+				else {
+					prog.projections.get(index).addCurrentValue(prog.summaryReport.enrollmentPeriod(currentSem.getPreRegDate(), currentSem.getAddDeadline(), currentDate)/100.0, e.getENR());
+				}
 			}
-			else {
-				prog.projections.get(index).addCurrentValue(prog.summaryReport.enrollmentPeriod(currentSem.getPreRegDate(), currentSem.getAddDeadline(), currentDate)/100.0, e.getENR());
-			}
-		}
-
-		for (File f : semFiles) {
 			f.delete();
 		}
 
@@ -129,6 +129,9 @@ public class RunProjections {
 		
     	//Automate this later when the projections are actually being calculated.	
 		for (CourseProjection cp : prog.projections) {
+			cp.makeProjection(0.25);
+			cp.makeProjection(0.5);
+			cp.makeProjection(0.75);
 			cp.makeProjection();
 			prog.summaryReport.addCourse(cp);
 			prog.detailedReport.addProjection(cp);

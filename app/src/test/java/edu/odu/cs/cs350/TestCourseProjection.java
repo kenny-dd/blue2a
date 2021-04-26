@@ -125,18 +125,22 @@ class TestCourseProjection {
 
         cp.addCurrentValue(0.5, 50);
         cp.addHistoricValue(0.5, 40);
+        cp.addHistoricValue(0.75, 80);
         cp.addHistoricValue(1.0, 104);
 
+        cp.makeProjection(0.75);
         cp.makeProjection();
 
         assertEquals(50, cp.getEnrollmentCount());
         assertEquals(130, cp.getProjectionCount());
+        assertEquals(100, cp.getProjectionCount(0.75));
         assertEquals(120, cp.getCourseCap());
         assertEquals(50, cp.getCurrentValue(0.5));
         assertEquals(1, cp.getCurrentValues().size());
         assertEquals(40, cp.getHistoricValue(0.5));
         assertEquals(104, cp.getHistoricValue(1.0));
-        assertEquals(2, cp.getHistoricValuesList().size());
+        assertEquals(3, cp.getHistoricValuesList().size());
+        assertEquals(2, cp.getProjections().size());
         assertEquals("CS120G", cp.getName());
         assertEquals("*CS120G 50         130       120", cp.toString());
     }
