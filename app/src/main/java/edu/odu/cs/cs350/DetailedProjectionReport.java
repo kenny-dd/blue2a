@@ -45,9 +45,7 @@ public class DetailedProjectionReport {
 	
 	}
 
-	public void GenerateHistoricalGraph(XSSFSheet sheet) {
-		
-		CourseProjection cp = projectionResults.get(0);		
+	public void GenerateHistoricalGraph(XSSFSheet sheet, CourseProjection cp) {
 		int index = 1;
 		for (Double ind : cp.getHistoricValuesList().keySet()) {
 			Row row = sheet.createRow(index);
@@ -59,9 +57,7 @@ public class DetailedProjectionReport {
 		}
 	}
 	
-	public void GenerateCurrentGraph(XSSFSheet sheet) {
-
-		CourseProjection cp = projectionResults.get(0);
+	public void GenerateCurrentGraph(XSSFSheet sheet, CourseProjection cp) {
 
 		int index = 1;
 		for(Double ind : cp.getCurrentValues().keySet()) {
@@ -75,10 +71,7 @@ public class DetailedProjectionReport {
 		}
 	}
 
-	public void GenerateProjectionGraph(XSSFSheet sheet) {
-		
-		CourseProjection cp = projectionResults.get(0);
-
+	public void GenerateProjectionGraph(XSSFSheet sheet, CourseProjection cp) {
 		int index = 1;
 		for(Double ind : cp.getProjections().keySet()) {
 			Row row = sheet.getRow(index);
@@ -102,6 +95,24 @@ public class DetailedProjectionReport {
 	//takes in output file path and creates an excel workbook based on version specified by CLI. 
 	public void outputviaCLI(String filePath) throws IOException, InvalidFormatException
 	{
+
+		try {
+			File directory = new File(filePath);
+			if (!directory.exists()) {
+				directory.mkdir();
+			}
+
+			output = new File(filePath + "/report.xlsx");
+			if (output.createNewFile()) {
+				//File was created successfully
+			} else {
+				//File already exists overwrite it
+			}
+		}catch (IOException e) {
+			System.err.println("Error occured when creating file " + filePath + "/report.xlsx");
+		}
+
+
 		InputStream templateStream = DetailedProjectionReport.class.getResourceAsStream("/template.xlsx");
 
 		try {
@@ -123,12 +134,13 @@ public class DetailedProjectionReport {
 		OutputStream fileout = new FileOutputStream(filePath + "/report.xlsx");
 
 		XSSFWorkbook wb =new XSSFWorkbook(templateStream);
-		XSSFSheet sheet = wb.getSheetAt(0);
-		
-		GenerateHistoricalGraph(sheet);
-		GenerateCurrentGraph(sheet);
-		GenerateProjectionGraph(sheet);
-		
+		for (CourseProjection cp : projectionResults) {
+			XSSFSheet sheet = wb.cloneSheet(0, cp.getName());
+			GenerateHistoricalGraph(sheet, cp);
+			GenerateCurrentGraph(sheet, cp);
+			GenerateProjectionGraph(sheet, cp);
+		}
+		wb.removeSheetAt(0);
 		wb.write(fileout);
 		fileout.close();
 	}
@@ -139,6 +151,5 @@ public class DetailedProjectionReport {
 	private String newFilePath;
 	private File output;
 	private List<CourseProjection> projectionResults;
-	
-	
+
 }
