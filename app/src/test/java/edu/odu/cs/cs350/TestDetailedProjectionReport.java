@@ -58,15 +58,17 @@ public class TestDetailedProjectionReport {
 
     @Test
     public void TestoutputViaCLI() throws IOException {
+        CourseProjection cp = new CourseProjection();
+        DetailedProjectionReport1.addProjection(cp);
+
         try {
             DetailedProjectionReport1.outputviaCLI("src/test/reports");
         } catch (Exception e) {
             assertEquals(0, 1, "Exception thrown: " + e.getMessage());
         }
 
-        CourseProjection cp = new CourseProjection();
-        DetailedProjectionReport1.addProjection(cp);
         File file = new File("src/test/reports/report.xlsx");
+
 
         assertThat(DetailedProjectionReport1.GetFilePath(), is(""));
         assertThat(DetailedProjectionReport1.getProjections().size(),is(1));

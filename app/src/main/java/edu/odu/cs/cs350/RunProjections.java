@@ -78,6 +78,10 @@ public class RunProjections {
 			}
 		}
 
+		for (File f : semFiles) {
+			f.delete();
+		}
+
 		for (Semester s : historicSems) {
 			List<File> files = s.fetchFiles();
 			for (File f : files) {
@@ -90,7 +94,9 @@ public class RunProjections {
 						prog.projections.get(index).addHistoricValue(prog.summaryReport.enrollmentPeriod(s.getPreRegDate(), s.getAddDeadline(), date)/100.0, e.getENR());
 					}
 				}
+				f.delete();
 			}
+
 		}
 
 

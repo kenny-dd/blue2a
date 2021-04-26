@@ -80,34 +80,14 @@ public class DetailedProjectionReport {
 	public void outputviaCLI(String filePath) throws IOException, InvalidFormatException
 	{
 		InputStream templateStream = DetailedProjectionReport.class.getResourceAsStream("/template.xlsx");
-		
-		try {
-			File directory = new File(filePath);
-			if (!directory.exists()) {
-				directory.mkdir();
-			}
 
-			output = new File(filePath + "/report.xlsx");
-			if (output.createNewFile()) {
-				//File was created successfully
-			} else {
-				//File already exists overwrite it
-			}
-			}catch (IOException e) {
-			System.err.println("Error occured when creating file " + filePath + "/report.xlsx");
-		}
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(output));
-		byte[] buffer = new byte[1024];
-		int lengthRead;
-		while ((lengthRead = templateStream.read(buffer)) > 0){
-			out.write(buffer, 0, lengthRead);
-			out.flush();
-		}
-		XSSFWorkbook wb =new XSSFWorkbook(OPCPackage.open(filePath + "/report.xlsx"));
+		OutputStream fileout = new FileOutputStream(filePath + "/report.xlsx");
+
+		XSSFWorkbook wb =new XSSFWorkbook(templateStream);
 		XSSFSheet sheet = wb.getSheetAt(0);
 		GenerateHistoricalGraph(sheet);
-		wb.write(out);
-		out.close();
+		wb.write(fileout);
+		fileout.close();
 	}
 
 	
